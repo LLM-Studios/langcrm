@@ -27,7 +27,7 @@ export default function Login({
       return redirect(`/login?message=${error.message}`);
     }
 
-    return redirect("/dashboard");
+    return redirect("/settings");
   };
 
   const signUp = async (formData: FormData) => {
@@ -40,17 +40,14 @@ export default function Login({
 
     const { error } = await supabase.auth.signUp({
       email,
-      password,
-      options: {
-        emailRedirectTo: `${origin}/auth/callback`,
-      },
+      password
     });
 
     if (error) {
       return redirect(`/login?message=${error.message}`);
     }
 
-    return redirect("/dashboard");
+    return redirect("/settings");
   };
 
   return (

@@ -4,7 +4,7 @@ import prisma from "@repo/database/prisma";
 import { Priority } from "@prisma/client";
 import { ChatCompletionMessageParam, ChatCompletionTool } from "openai/src/resources/chat/index.js";
 
-const system_prompt = "Your task is to extract information about the user from their input and use your tools to update the database schema accordingly. ";
+const system_prompt = "Your task is to extract information about the user from their input and use your tools to update the database schema accordingly. For creating new keys, use the 'extend_schema' tool. For updating existing keys, use the 'update_schema' tool. ";
 
 const tools = [ 
     {
@@ -67,7 +67,7 @@ const functions = {
     extend_schema: async (params: {key: string, value: string, description: string, type: string, priority: Priority}, metadata: {distinctId: string}) => {
         logger.debug({ msg: 'Extending schema', params, metadata });
         const { key, value, description, type, priority } = params;
-        const extended = await prisma.key.create({
+        await prisma.key.create({
             data: { 
               id: key, 
               description,
@@ -80,17 +80,16 @@ const functions = {
                 }
               }
             }
+        }).catch((error) => {
+          logger.error({ msg: 'Failed to update schema', params, error });
+          return 'Failed'
         });
-        if (!extended) {
-            logger.error({ msg: 'Failed to extend schema', params });
-            return 'Failed'
-        }
         return 'Success'
     },
     update_schema: async (params: {key: string, value: string}, metadata: {distinctId: string}) => {
         logger.debug({ msg: 'Updating schema', params, metadata });
         const { key, value } = params;
-        const updated = await prisma.value.create({
+        await prisma.value.create({
             data: { 
               key: { 
                 connect: { 
@@ -100,11 +99,10 @@ const functions = {
               value,
               distinctId: metadata.distinctId
             }
-        });
-        if (!updated) {
-            logger.error({ msg: 'Failed to update schema', params });
+        }).catch((error) => {
+            logger.error({ msg: 'Failed to update schema', params, error });
             return 'Failed'
-        }
+        });
         return 'Success'
     }
 } as Record<string, (..._args: any[]) => Promise<string>>;

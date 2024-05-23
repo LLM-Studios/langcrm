@@ -3,6 +3,7 @@ import { swagger } from '@elysiajs/swagger';
 import { logger } from '$lib/logger';
 import { jwt } from '@elysiajs/jwt';
 import { bearer } from '@elysiajs/bearer';
+import { cors } from '@elysiajs/cors'
 
 const swaggerPlugin = () => new Elysia().use(swagger({
     path: "/docs",
@@ -52,10 +53,14 @@ const jwtPlugin = new Elysia()
         })
     }));
 
+const corsPlugin = new Elysia()
+    .use(cors());
+
 const plugins = new Elysia()
     .use(swaggerPlugin)
     .use(loggerPlugin)
-    .use(jwtPlugin);
+    .use(jwtPlugin)
+    .use(corsPlugin);
 
 export type App = typeof plugins;
 
