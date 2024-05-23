@@ -1,0 +1,23 @@
+{
+    "name": "@repo/database",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "supabase start && bunx prisma migrate dev && bunx prisma generate"
+    },
+    "exports": {
+        "./prisma": "./prisma/client.ts",
+        "./schema": "./prisma/schema.prisma",
+        "./supabase": "./supabase/client.ts"
+    },
+    "files": [
+        "prisma/client.ts",
+        "prisma/schema.prisma",
+        "supabase/client.ts"
+    ],
+    "dependencies": {
+        "prisma": "^5.14.0",
+        "@prisma/client": "5.14.0",
+        "@supabase/supabase-js": "^2.43.2"
+    }
+}

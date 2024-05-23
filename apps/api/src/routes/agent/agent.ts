@@ -1,8 +1,8 @@
 import { Agent } from "$modules/agent";
 import { logger } from "$lib/logger";
-import prisma from "$lib/prisma/client";
+import prisma from "@repo/database/prisma";
 import { Priority } from "@prisma/client";
-import { ChatCompletionMessageParam, ChatCompletionTool } from "openai/resources";
+import { ChatCompletionMessageParam, ChatCompletionTool } from "openai/src/resources/chat/index.js";
 
 const system_prompt = "Your task is to extract information about the user from their input and use your tools to update the database schema accordingly. ";
 
@@ -107,7 +107,7 @@ const functions = {
         }
         return 'Success'
     }
-} as Record<string, (...args: any[]) => Promise<string>>;
+} as Record<string, (..._args: any[]) => Promise<string>>;
 
 const examples = [
     { role: "system", content: "---Start of examples---" },

@@ -1,7 +1,7 @@
 import { t } from "elysia";
-import prisma from "$lib/prisma/client";
 import agent from "./agent";
 import { App } from "$plugins/index";
+import prisma from "@repo/database/prisma";
 
 const route = (app: App) => app
     .post("/agent", async ({ body, logger }) => {

@@ -4,11 +4,14 @@ const project = resolve(process.cwd(), "tsconfig.json");
 
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
-  extends: ["eslint:recommended", "prettier", "eslint-config-turbo"],
+  extends: [
+    "eslint:recommended",
+    "prettier",
+    "eslint-config-turbo",
+  ],
   plugins: ["only-warn"],
   globals: {
-    React: true,
-    JSX: true,
+    Bun: true,
   },
   env: {
     node: true,
@@ -31,4 +34,12 @@ module.exports = {
       files: ["*.js?(x)", "*.ts?(x)"],
     },
   ],
+  rules: {
+    // other rules...
+    "no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_", // Ignore parameters that start with an underscore
+      "ignoreRestSiblings": true,
+      "varsIgnorePattern": "^_" // Optionally, ignore variables that start with an underscore
+    }]
+  }
 };

@@ -19,7 +19,7 @@ export class Agent {
     private model: string;
     private system_prompt: string;
     private tools?: OpenAI.Chat.Completions.ChatCompletionTool[];
-    private functions?: Record<string, (...args: any[]) => Promise<string>>;
+    private functions?: Record<string, (..._args: any[]) => Promise<string>>;
     private examples: OpenAI.Chat.Completions.ChatCompletionMessageParam[];
     public metadata?: Record<string, any>;
 
@@ -27,7 +27,7 @@ export class Agent {
         model?: string, 
         system_prompt: string, 
         tools?: OpenAI.Chat.Completions.ChatCompletionTool[], 
-        functions?: Record<string, (...args: any[]) => Promise<string>>, 
+        functions?: Record<string, (..._args: any[]) => Promise<string>>, 
         examples?: OpenAI.Chat.Completions.ChatCompletionMessageParam[],
     }) {
         const { model, system_prompt, tools, functions, examples } = params;
@@ -61,6 +61,10 @@ export class Agent {
             ],
         });
 
+        if (!completion.choices[0]) {
+            return null;
+        }
+
         const message = completion.choices[0].message;
 
         if (message.tool_calls) {
@@ -78,6 +82,11 @@ export class Agent {
             const name = toolCall.function.name;
             const args = JSON.parse(toolCall.function.arguments);
             const functionToCall = this.functions![name];
+
+            if (!functionToCall) {
+                logger.error(`Function ${name} not found`);
+                continue;
+            }
 
             const response = await functionToCall(args, this.metadata);
 
