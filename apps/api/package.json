@@ -1,0 +1,24 @@
+{
+  "name": "api",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts"
+  },
+  "dependencies": {
+    "@elysiajs/bearer": "^1.0.2",
+    "@elysiajs/jwt": "^1.0.2",
+    "@elysiajs/swagger": "^1.0.5",
+    "@prisma/client": "5.14.0",
+    "@supabase/supabase-js": "^2.43.2",
+    "elysia": "latest",
+    "openai": "^4.47.1",
+    "pino": "^9.1.0",
+    "pino-pretty": "^11.0.0",
+    "prisma": "^5.14.0"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "module": "src/index.js"
+}
