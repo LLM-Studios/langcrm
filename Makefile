@@ -2,6 +2,8 @@
 
 setup:
 	@echo "Setting up the environment..."
+	@echo "Installing dependencies"
+	bun i
 	@echo "Starting supabase"
 	supabase start --workdir ./packages/database/
 	@echo "Setting up doppler"
