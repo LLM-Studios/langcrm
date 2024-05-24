@@ -22,17 +22,19 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "@radix-ui/react-alert-dialog";
-import { Plus, Copy, Trash2, Check, X } from "lucide-react";
+import { Plus, Copy, Trash2, Check, X, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function Token() {
+export default function TokenSection() {
   const [token, setToken] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getToken();
   }, []);
 
   async function getToken() {
+    setIsLoading(true);
     const response = await fetch("api/token");
     if (!response.ok) {
       throw new Error("Error getting token");
@@ -41,9 +43,11 @@ export default function Token() {
     if (data.success) {
       setToken(data.token.value);
     }
+    setIsLoading(false);
   }
 
   async function postToken() {
+    setIsLoading(true);
     const response = await fetch("api/token", {
       method: "POST",
       headers: {
@@ -55,6 +59,7 @@ export default function Token() {
     }
     const data = await response.json();
     setToken(data.value);
+    setIsLoading(false);
   }
 
   function copyToken() {
@@ -68,6 +73,7 @@ export default function Token() {
   }
 
   async function deleteToken() {
+    setIsLoading(true);
     const response = await fetch("api/token", {
       method: "DELETE",
       headers: {
@@ -78,6 +84,7 @@ export default function Token() {
       throw new Error("Error deleting token");
     }
     setToken("");
+    setIsLoading(false);
   }
 
   return (
@@ -95,9 +102,9 @@ export default function Token() {
         <Button
           className="flex flex-row gap-2"
           onClick={postToken}
-          disabled={token !== ""}
+          disabled={token !== "" || isLoading}
         >
-          <Plus className="h-4 w-4" />
+          {isLoading ? <Loader2 className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
           Generate
         </Button>
         <Button
