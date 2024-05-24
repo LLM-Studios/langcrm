@@ -1,6 +1,9 @@
 import { App } from "$plugins/index";
+import prisma from "@repo/database/prisma";
 
-const auth = (app: App) => app.onBeforeHandle(({ bearer, jwt, logger }) => {
+const anonRoutes = ["/token"];
+
+const auth = (app: App) => app.onBeforeHandle(async ({ bearer, jwt, logger, store, path }) => {
     if (!bearer) {
         logger.error("No token provided");
         return Response.json({
@@ -20,6 +23,24 @@ const auth = (app: App) => app.onBeforeHandle(({ bearer, jwt, logger }) => {
             statusText: "Unauthorized"
         });
     }
+    if (anonRoutes.some(route => path.startsWith(route))) {
+        return;
+    }
+    const token = await prisma.token.findUnique({
+        where: {
+            value: bearer
+        }
+    });
+    if (!token) {
+        logger.error("Token not found");
+        return Response.json({
+            message: "Token not found"
+        }, {
+            status: 401,
+            statusText: "Unauthorized"
+        });
+    }
+    store.token = token;
 });
 
 export default auth;

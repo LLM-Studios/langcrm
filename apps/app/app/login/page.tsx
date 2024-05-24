@@ -50,7 +50,7 @@ export default function Login({
       throw new Error("User not found");
     }
 
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         authId: data.user.id,
         email,
@@ -63,11 +63,9 @@ export default function Login({
     }).catch((error) => {
       console.error(error);
       throw new Error("Error creating user");
+    }).then(() => {
+      return redirect("/settings");
     });
-
-    console.log(user);
-
-    return redirect("/settings");
   };
 
   return (

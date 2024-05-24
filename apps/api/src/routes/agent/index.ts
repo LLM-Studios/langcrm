@@ -4,10 +4,11 @@ import { App } from "$plugins/index";
 import prisma from "@repo/database/prisma";
 
 const route = (app: App) => app
-    .post("/agent", async ({ body, logger }) => {
+    .post("/agent", async ({ body, logger, store }) => {
         const { input, distinctId } = body;
         agent.metadata = {
-            distinctId: distinctId
+            distinctId: distinctId,
+            workspaceId: store.token.workspaceId
         };
         const keys = await prisma.key.findMany().then(keys => {
           const ids = keys.map(key => key.id);

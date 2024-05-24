@@ -62,6 +62,7 @@ model Workspace {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
   values      Value[]
+  tokens      Token[]
 }
 
 model User {
@@ -73,6 +74,7 @@ model User {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now()) @updatedAt
   workspaces    Workspace[]
+  tokens        Token[]
 }
 
 enum UserStatus {
@@ -91,3 +93,13 @@ view AuthUser {
   email String?
   role  String
 }
+
+model Token {
+  id String @id @default(uuid())
+  value String @unique
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  workspaceId String
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+}
+

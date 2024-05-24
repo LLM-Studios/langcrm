@@ -4,6 +4,7 @@ import { logger } from '$lib/logger';
 import { jwt } from '@elysiajs/jwt';
 import { bearer } from '@elysiajs/bearer';
 import { cors } from '@elysiajs/cors'
+import { Token } from '@prisma/client';
 
 const swaggerPlugin = () => new Elysia().use(swagger({
     path: "/docs",
@@ -42,7 +43,7 @@ const loggerPlugin = new Elysia().decorate('logger', logger)
     });
 
 const jwtPlugin = new Elysia()
-    .state({ user: {} as {} | null })
+    .state({ token: {} as Token })
     .use(bearer())
     .use(jwt({
         name: 'jwt',
