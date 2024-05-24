@@ -14,6 +14,9 @@
       "cache": false,
       "persistent": true,
       "dotEnv": ["env.local", ".env"]
+    },
+    "format": {
+      "dependsOn": ["^format"]
     }
   }
 }

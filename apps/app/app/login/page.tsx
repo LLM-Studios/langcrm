@@ -3,7 +3,14 @@ import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import prisma from "@repo/database/prisma";
 
 export default function Login({
@@ -39,7 +46,7 @@ export default function Login({
 
     const { data, error } = await supabase.auth.signUp({
       email,
-      password
+      password,
     });
 
     if (error) {
@@ -50,22 +57,25 @@ export default function Login({
       throw new Error("User not found");
     }
 
-    await prisma.user.create({
-      data: {
-        authId: data.user.id,
-        email,
-        workspaces: {
-          create: {
-            name: `${data.user.email?.split("@")[0]}'s Workspace`,
-          }
-        }
-      }
-    }).catch((error) => {
-      console.error(error);
-      throw new Error("Error creating user");
-    }).then(() => {
-      return redirect("/settings");
-    });
+    await prisma.user
+      .create({
+        data: {
+          authId: data.user.id,
+          email,
+          workspaces: {
+            create: {
+              name: `${data.user.email?.split("@")[0]}'s Workspace`,
+            },
+          },
+        },
+      })
+      .catch((error) => {
+        console.error(error);
+        throw new Error("Error creating user");
+      })
+      .then(() => {
+        return redirect("/settings");
+      });
   };
 
   return (
@@ -73,12 +83,19 @@ export default function Login({
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your email below to login to your account.</CardDescription>
+          <CardDescription>
+            Enter your email below to login to your account.
+          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input name="email" placeholder="jane@doe.com" required type="email" />
+            <Input
+              name="email"
+              placeholder="jane@doe.com"
+              required
+              type="email"
+            />
           </div>
           <div className="relative grid gap-2">
             <Label htmlFor="password">Password</Label>
@@ -86,8 +103,16 @@ export default function Login({
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-2">
-          <SubmitButton className="w-full" formAction={signIn}>Sign in</SubmitButton>
-          <SubmitButton className="w-full" variant="outline" formAction={signUp}>Sign up</SubmitButton>
+          <SubmitButton className="w-full" formAction={signIn}>
+            Sign in
+          </SubmitButton>
+          <SubmitButton
+            className="w-full"
+            variant="outline"
+            formAction={signUp}
+          >
+            Sign up
+          </SubmitButton>
           <p className="text-red-500 m-2">{searchParams.message}</p>
         </CardFooter>
       </Card>

@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "doppler run -- turbo dev",
     "build": "turbo build",
-    "lint": "turbo lint",
+    "lint": "doppler run --mount .env -- turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
