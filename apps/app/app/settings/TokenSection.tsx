@@ -104,7 +104,11 @@ export default function TokenSection() {
           onClick={postToken}
           disabled={token !== "" || isLoading}
         >
-          {isLoading ? <Loader2 className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+          {isLoading ? (
+            <Loader2 className="h-4 w-4" />
+          ) : (
+            <Plus className="h-4 w-4" />
+          )}
           Generate
         </Button>
         <Button
