@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -37,10 +38,12 @@ model Value {
   id        String   @id @default(uuid())
   keyId     String
   distinctId String
+  workspaceId String
   value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   key       Key      @relation(fields: [keyId], references: [id])
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
 }
 
 model Question {
@@ -50,4 +53,41 @@ model Question {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   key       Key      @relation(fields: [keyId], references: [id])
+}
+
+model Workspace {
+  id          String   @id @default(uuid())
+  name        String
+  users       User[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  values      Value[]
+}
+
+model User {
+  id            String      @id @default(uuid())
+  authId        String     @unique
+  email         String
+  status        UserStatus  @default(ACTIVE)
+  role          Role        @default(USER)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt
+  workspaces    Workspace[]
+}
+
+enum UserStatus {
+  WAITLIST
+  ACTIVE
+  DELETED
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+view AuthUser {
+  id    String  @unique
+  email String?
+  role  String
 }

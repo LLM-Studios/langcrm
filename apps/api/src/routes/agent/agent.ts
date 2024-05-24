@@ -64,7 +64,7 @@ const tools = [
 ] as ChatCompletionTool[];
 
 const functions = {
-    extend_schema: async (params: {key: string, value: string, description: string, type: string, priority: Priority}, metadata: {distinctId: string}) => {
+    extend_schema: async (params: {key: string, value: string, description: string, type: string, priority: Priority}, metadata: {distinctId: string, workspaceId: string}) => {
         logger.debug({ msg: 'Extending schema', params, metadata });
         const { key, value, description, type, priority } = params;
         await prisma.key.create({
@@ -74,9 +74,14 @@ const functions = {
               type,
               priority,
               values: {
-                create: {  
-                  value, 
-                  distinctId: metadata.distinctId 
+                create: {
+                  value,
+                  distinctId: metadata.distinctId,
+                  workspace: {
+                    connect: {
+                      id: metadata.workspaceId
+                    }
+                  }
                 }
               }
             }
@@ -86,7 +91,7 @@ const functions = {
         });
         return 'Success'
     },
-    update_schema: async (params: {key: string, value: string}, metadata: {distinctId: string}) => {
+    update_schema: async (params: {key: string, value: string}, metadata: {distinctId: string, workspaceId: string}) => {
         logger.debug({ msg: 'Updating schema', params, metadata });
         const { key, value } = params;
         await prisma.value.create({
@@ -97,7 +102,12 @@ const functions = {
                 } 
               },
               value,
-              distinctId: metadata.distinctId
+              distinctId: metadata.distinctId,
+              workspace: {
+                connect: {
+                  id: metadata.workspaceId
+                }
+              }
             }
         }).catch((error) => {
             logger.error({ msg: 'Failed to update schema', params, error });

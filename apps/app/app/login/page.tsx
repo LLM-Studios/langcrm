@@ -1,10 +1,10 @@
-import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import prisma from "@repo/database/prisma";
 
 export default function Login({
   searchParams,
@@ -33,12 +33,11 @@ export default function Login({
   const signUp = async (formData: FormData) => {
     "use server";
 
-    const origin = headers().get("origin");
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password
     });
@@ -46,6 +45,27 @@ export default function Login({
     if (error) {
       return redirect(`/login?message=${error.message}`);
     }
+
+    if (!data.user) {
+      throw new Error("User not found");
+    }
+
+    const user = await prisma.user.create({
+      data: {
+        authId: data.user.id,
+        email,
+        workspaces: {
+          create: {
+            name: `${data.user.email?.split("@")[0]}'s Workspace`,
+          }
+        }
+      }
+    }).catch((error) => {
+      console.error(error);
+      throw new Error("Error creating user");
+    });
+
+    console.log(user);
 
     return redirect("/settings");
   };
