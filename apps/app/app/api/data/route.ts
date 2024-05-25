@@ -2,7 +2,7 @@ import { getUserWorkspace } from "@/lib/supabase/utils";
 import prisma from "@repo/database/prisma";
 
 export async function GET() {
-  const { user, workspace } = await getUserWorkspace();
+  const { workspace } = await getUserWorkspace();
   const data = await prisma.value
     .findMany({
       where: {
