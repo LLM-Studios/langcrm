@@ -28,7 +28,7 @@ export default function Header() {
   const items = [
     {
       icon: <BookOpen className="h-4 w-4" />,
-      href: `${process.env.API_URL}/docs`,
+      href: "http://localhost:3000/docs",
       label: "Docs",
     },
     {
@@ -56,7 +56,7 @@ export default function Header() {
         <span className="">LangCRM</span>
       </Link>
       <div className="flex-1 overflow-auto py-2">
-        <nav className="flex items-center justify-end text-sm font-medium">
+        <nav className="flex items-center justify-end text-sm font-medium gap-2">
           <ThemeToggle />
           <div className="md:hidden rounded-lg bg-gray-100 px-3 py-2 text-gray-900 transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50">
             <DropdownMenu>
@@ -86,7 +86,7 @@ export default function Header() {
               return (
                 <Link
                   key={item.href}
-                  className={`flex items-center gap-2 rounded-lg ${isPath ? "bg-gray-100 " : ""} px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 ${isPath ? "text-gray-900 dark:text-gray-50" : ""}`}
+                  className={`flex items-center gap-2 rounded-lg ${isPath ? "bg-gray-100 dark:bg-gray-800" : ""} px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 ${isPath ? "text-gray-900 dark:text-gray-50" : ""}`}
                   href={item.href}
                 >
                   {item.icon}
