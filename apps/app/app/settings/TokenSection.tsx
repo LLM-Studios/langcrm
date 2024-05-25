@@ -40,7 +40,7 @@ export default function TokenSection() {
       throw new Error("Error getting token");
     }
     const data = await response.json();
-    if (data.success) {
+    if (data.token) {
       setToken(data.token.value);
     }
     setIsLoading(false);

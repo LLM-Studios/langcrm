@@ -13,7 +13,6 @@ export async function GET() {
     .catch((err) => {
       return new Response(
         JSON.stringify({
-          success: false,
           error: err,
         }),
         {
@@ -24,7 +23,6 @@ export async function GET() {
     });
   return new Response(
     JSON.stringify({
-      success: true,
       token,
     }),
     {
