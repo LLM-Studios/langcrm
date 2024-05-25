@@ -2,12 +2,26 @@
 
 import { Button } from "@/components/ui/button";
 import { createClientComponentClient } from "@/lib/supabase/client";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
-import { DatabaseZap, Menu, Table2, SettingsIcon, BookOpen, LogOut } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@radix-ui/react-dropdown-menu";
+import {
+  DatabaseZap,
+  Menu,
+  Table2,
+  SettingsIcon,
+  BookOpen,
+  LogOut,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import ThemeToggle from "./ThemeToggle";
 
-export default  function Header() {
+export default function Header() {
   const supabase = createClientComponentClient();
   const router = useRouter();
   const pathname = usePathname();
@@ -43,6 +57,7 @@ export default  function Header() {
       </Link>
       <div className="flex-1 overflow-auto py-2">
         <nav className="flex items-center justify-end text-sm font-medium">
+          <ThemeToggle />
           <div className="md:hidden rounded-lg bg-gray-100 px-3 py-2 text-gray-900 transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -66,21 +81,19 @@ export default  function Header() {
             </DropdownMenu>
           </div>
           <div className="hidden md:flex md:flex-row gap-2">
-            {
-              items.map((item) => {
-                const isPath = pathname === item.href;
-                return (
-                  <Link
-                    key={item.href}
-                    className={`flex items-center gap-2 rounded-lg ${isPath ? "bg-gray-100 " : ""} px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 ${isPath ? "text-gray-900 dark:text-gray-50" : ""}`}
-                    href={item.href}
-                  >
-                    {item.icon}
-                    {item.label}
-                  </Link>
-                );
-              })
-            }
+            {items.map((item) => {
+              const isPath = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  className={`flex items-center gap-2 rounded-lg ${isPath ? "bg-gray-100 " : ""} px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 ${isPath ? "text-gray-900 dark:text-gray-50" : ""}`}
+                  href={item.href}
+                >
+                  {item.icon}
+                  {item.label}
+                </Link>
+              );
+            })}
             <Button
               variant={"destructive"}
               className="flex items-center gap-2"
@@ -95,7 +108,6 @@ export default  function Header() {
           </div>
         </nav>
       </div>
-      </header>
+    </header>
   );
 }
-

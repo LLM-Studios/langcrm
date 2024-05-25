@@ -4,9 +4,14 @@ import { createServerComponentClient } from "@/lib/supabase/server-client";
 import { redirect } from "next/navigation";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 import { Mail } from "lucide-react";
-
 
 export default async function Settings() {
   const supabase = createServerComponentClient();
@@ -67,10 +72,7 @@ export function HelpSection() {
         <CardDescription>Get in touch with the team</CardDescription>
       </CardHeader>
       <CardContent>
-        <Button
-          variant={"secondary"}
-          className="flex flex-row gap-2"
-        >
+        <Button variant={"secondary"} className="flex flex-row gap-2">
           <Mail className="h-4 w-4" />
           Contact
         </Button>

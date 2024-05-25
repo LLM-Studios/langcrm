@@ -53,21 +53,27 @@ export default function ValuesTable() {
                 <TableHead className="max-w-[150px]">key</TableHead>
                 <TableHead className="max-w-[150px]">value</TableHead>
                 <TableHead className="max-w-[150px]">description</TableHead>
-                <TableHead className="hidden md:table-cell">distinctId</TableHead>
-                <TableHead className="hidden md:table-cell">createdAt</TableHead>
+                <TableHead className="hidden md:table-cell">
+                  distinctId
+                </TableHead>
+                <TableHead className="hidden md:table-cell">
+                  createdAt
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {data.map((item) => (
-                  <TableRow>
-                    <TableCell>{item.key.id}</TableCell>
-                    <TableCell className="font-medium">{item.value}</TableCell>
-                    <TableCell>{item.key.description}</TableCell>
-                    <TableCell className="hidden md:table-cell">{item.distinctId}</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      {item.createdAt.toString()}
-                    </TableCell>
-                  </TableRow>
+                <TableRow>
+                  <TableCell>{item.key.id}</TableCell>
+                  <TableCell className="font-medium">{item.value}</TableCell>
+                  <TableCell>{item.key.description}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {item.distinctId}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {item.createdAt.toString()}
+                  </TableCell>
+                </TableRow>
               ))}
             </TableBody>
           </Table>
