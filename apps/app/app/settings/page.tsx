@@ -26,7 +26,7 @@ export default async function Settings() {
   if (!user) {
     return redirect("/login");
   }
-  
+
   return (
     <div className="min-h-screen w-full">
       <header className="flex h-14 lg:h-[60px] items-center px-4 gap-4 border-b bg-gray-100/40 dark:bg-gray-800/40">
