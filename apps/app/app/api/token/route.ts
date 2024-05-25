@@ -34,7 +34,7 @@ export async function GET() {
 
 export async function POST() {
   const { user, workspace } = await getUserWorkspace();
-  const response = await fetch("http://localhost:3000/token/local", {
+  const response = await fetch(`${process.env.API_URL}/token/local`, {
     headers: {
       Authorization: `Bearer ${process.env.API_URL}`,
     },

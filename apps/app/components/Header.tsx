@@ -28,7 +28,7 @@ export default function Header() {
   const items = [
     {
       icon: <BookOpen className="h-4 w-4" />,
-      href: "http://localhost:3000/docs",
+      href: `${process.env.API_URL}/docs`,
       label: "Docs",
     },
     {
