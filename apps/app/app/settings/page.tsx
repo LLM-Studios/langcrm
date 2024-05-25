@@ -64,7 +64,7 @@ function Main() {
   );
 }
 
-export function HelpSection() {
+function HelpSection() {
   return (
     <Card>
       <CardHeader>
