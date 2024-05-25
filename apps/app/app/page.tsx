@@ -9,73 +9,73 @@ import ThemeToggle from "@/components/ThemeToggle";
 export default function Home() {
   return (
     <div key="1" className="flex flex-col min-h-[100dvh]">
-      <header className="px-4 lg:px-6 h-14 flex items-center justify-between">
-        <Link className="flex items-center gap-2 font-semibold" href="/data">
-          <DatabaseZap className="h-6 w-6" />
+      <header className="px-6 lg:px-8 h-16 flex items-center justify-between">
+        <Link className="flex items-center gap-3 font-semibold" href="#">
+          <DatabaseZap className="h-7 w-7" />
           <span className="">LangCRM</span>
         </Link>
-        <nav className="hidden lg:flex gap-6">
+        <nav className="hidden lg:flex gap-8">
           <Link
             className="text-sm font-medium hover:underline underline-offset-4"
-            href="#"
+            href="#features"
           >
             Features
           </Link>
           <Link
             className="text-sm font-medium hover:underline underline-offset-4"
-            href="#"
-          >
-            Pricing
-          </Link>
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            href="#"
+            href="#customers"
           >
             Customers
           </Link>
           <Link
             className="text-sm font-medium hover:underline underline-offset-4"
-            href="#"
+            href="#pricing"
           >
-            About
+            Pricing
+          </Link>
+          <Link
+            className="text-sm font-medium hover:underline underline-offset-4"
+            href="#contact"
+          >
+            Contact
           </Link>
         </nav>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <ThemeToggle />
-          <Button className="hidden md:flex gap-2" variant="secondary">
-            <BookOpen className="h-4 w-4" />
+          <Button className="hidden md:flex gap-3" variant="secondary">
+            <BookOpen className="h-5 w-5" />
             Documentation
           </Button>
         </div>
       </header>
       <main className="flex-1">
-        <section className="w-full py-8 md:py-12 lg:py-16 xl:py-24">
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-[1fr_550px] lg:gap-12 xl:grid-cols-[1fr_650px]">
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+        <section className="w-full py-10 md:py-14 lg:py-18 xl:py-28">
+          <div className="container px-6 md:px-8">
+            <div className="grid gap-8 lg:grid-cols-[1fr_600px] lg:gap-14 xl:grid-cols-[1fr_700px]">
+              <div className="flex flex-col justify-center space-y-6">
+                <div className="space-y-3">
+                  <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl xl:text-7xl">
                     Unlock the Power of Conversational CRM
                   </h1>
-                  <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
+                  <p className="max-w-[650px] text-gray-500 md:text-xl dark:text-gray-400">
                     Streamline your sales and support workflows with our
                     AI-powered CRM platform. Engage customers, automate tasks,
                     and drive growth.
                   </p>
                 </div>
-                <Button className="text-base font-medium flex gap-2">
-                  <Calendar className="h-4 w-4" />
+                <Button className="text-base font-medium flex gap-3">
+                  <Calendar className="h-5 w-5" />
                   Book a Demo
                 </Button>
-                <div className="flex items-center gap-4">
-                  <form className="flex items-center w-full gap-2">
+                <div className="flex items-center gap-5">
+                  <form className="flex items-center w-full gap-3">
                     <Input
                       className="flex-grow"
                       placeholder="Enter your email"
                       type="email"
                     />
-                    <Button variant="outline" className="flex gap-2">
-                      <Mail className="h-4 w-4" />
+                    <Button variant="outline" className="flex gap-3">
+                      <Mail className="h-5 w-5" />
                       Get in Touch
                     </Button>
                   </form>
@@ -87,46 +87,46 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="w-full py-8 md:py-12 lg:py-16 bg-white dark:bg-gray-800">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+        <section id="features" className="w-full py-10 md:py-14 lg:py-18 bg-white dark:bg-gray-900">
+          <div className="container px-6 md:px-8">
+            <div className="flex flex-col items-center justify-center space-y-6 text-center">
+              <div className="space-y-3">
+                <h2 className="text-4xl font-bold tracking-tighter sm:text-6xl">
                   Powerful Features for Your Business
                 </h2>
-                <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                <p className="max-w-[950px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
                   Our AI-powered CRM platform offers a suite of features to
                   streamline your sales and support workflows.
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl items-center gap-6 py-8 lg:grid-cols-3 lg:gap-12">
-              <div className="flex flex-col justify-center space-y-4 text-center">
-                <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
+            <div className="mx-auto grid max-w-6xl items-center gap-8 py-10 lg:grid-cols-3 lg:gap-14">
+              <div className="flex flex-col justify-center space-y-6 text-center">
+                <div className="inline-block rounded-lg bg-gray-100 px-4 py-2 text-sm dark:bg-gray-800">
                   Conversational AI
                 </div>
-                <h3 className="text-2xl font-bold">Intelligent Chatbots</h3>
+                <h3 className="text-3xl font-bold">Intelligent Chatbots</h3>
                 <p className="text-gray-500 dark:text-gray-400">
                   Engage customers with AI-powered chatbots that understand
                   natural language and provide personalized responses.
                 </p>
               </div>
-              <div className="flex flex-col justify-center space-y-4 text-center">
-                <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
+              <div className="flex flex-col justify-center space-y-6 text-center">
+                <div className="inline-block rounded-lg bg-gray-100 px-4 py-2 text-sm dark:bg-gray-800">
                   Automation
                 </div>
-                <h3 className="text-2xl font-bold">Streamlined Workflows</h3>
+                <h3 className="text-3xl font-bold">Streamlined Workflows</h3>
                 <p className="text-gray-500 dark:text-gray-400">
                   Automate repetitive tasks and sales processes to increase
                   efficiency and free up your team to focus on high-value
                   activities.
                 </p>
               </div>
-              <div className="flex flex-col justify-center space-y-4 text-center">
-                <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
+              <div className="flex flex-col justify-center space-y-6 text-center">
+                <div className="inline-block rounded-lg bg-gray-100 px-4 py-2 text-sm dark:bg-gray-800">
                   Analytics
                 </div>
-                <h3 className="text-2xl font-bold">Insightful Reporting</h3>
+                <h3 className="text-3xl font-bold">Insightful Reporting</h3>
                 <p className="text-gray-500 dark:text-gray-400">
                   Gain valuable qualitative insights into your customer
                   interactions and sales performance with our robust reporting
@@ -136,28 +136,28 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="w-full py-8 md:py-12 lg:py-16">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+        <section id="customers" className="w-full py-10 md:py-14 lg:py-18">
+          <div className="container px-6 md:px-8">
+            <div className="flex flex-col items-center justify-center space-y-6 text-center">
+              <div className="space-y-3">
+                <h2 className="text-4xl font-bold tracking-tighter sm:text-6xl">
                   What Our Customers Say
                 </h2>
-                <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                <p className="max-w-[950px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
                   Hear from businesses that have transformed their sales and
                   support operations with our CRM platform.
                 </p>
               </div>
-              <div className="mx-auto max-w-2xl grid gap-6 sm:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1">
+              <div className="mx-auto max-w-3xl grid gap-8 sm:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1">
                 <Card className="bg-white dark:bg-gray-950 shadow-lg rounded-lg">
-                  <CardContent className="space-y-4">
-                    <blockquote className="text-lg font-semibold leading-snug">
+                  <CardContent className="space-y-6">
+                    <blockquote className="text-xl font-semibold leading-snug">
                       "The conversational AI chatbot has been a game-changer for
                       our customer support. It's able to handle a wide range of
                       inquiries and frees up our team to focus on more complex
                       issues."
                     </blockquote>
-                    <div className="flex items-center justify-center space-x-4">
+                    <div className="flex items-center justify-center space-x-6">
                       <Avatar>
                         <AvatarImage
                           alt="Avatar"
@@ -175,14 +175,14 @@ export default function Home() {
                   </CardContent>
                 </Card>
                 <Card className="bg-white dark:bg-gray-950 shadow-lg rounded-lg">
-                  <CardContent className="space-y-4">
-                    <blockquote className="text-lg font-semibold leading-snug">
+                  <CardContent className="space-y-6">
+                    <blockquote className="text-xl font-semibold leading-snug">
                       "The automation features in the CRM have helped us
                       streamline our sales process and increase our conversion
                       rates. The reporting tools give us valuable insights to
                       optimize our strategy."
                     </blockquote>
-                    <div className="flex items-center justify-center space-x-4">
+                    <div className="flex items-center justify-center space-x-6">
                       <Avatar>
                         <AvatarImage
                           alt="Avatar"
@@ -203,20 +203,20 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="w-full py-8 md:py-12 lg:py-16 bg-white dark:bg-[#0f172a]">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+        <section id="pricing" className="w-full py-10 md:py-14 lg:py-18 bg-white dark:bg-gray-900">
+          <div className="container px-6 md:px-8">
+            <div className="flex flex-col items-center justify-center space-y-6 text-center">
+              <div className="space-y-3">
+                <h2 className="text-4xl font-bold tracking-tighter sm:text-6xl">
                   Pricing
                 </h2>
-                <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                <p className="max-w-[950px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
                   Our Conversational CRM platform is available at a competitive
                   price. Get a quote to find the best plan for your business.
                 </p>
               </div>
               <Button
-                className="px-8 py-2 text-base font-medium rounded-md"
+                className="px-10 py-3 text-base font-medium rounded-md"
                 variant="secondary"
               >
                 Get a Quote
@@ -224,19 +224,19 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="w-full py-8 md:py-12 lg:py-16 bg-gray-100 dark:bg-gray-800">
-          <div className="container px-4 md:px-6 flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+        <section id="contact" className="w-full py-10 md:py-14 lg:py-18 bg-gray-100 dark:bg-gray-950">
+          <div className="container px-6 md:px-8 flex flex-col items-center justify-center space-y-6 text-center">
+            <div className="space-y-3">
+              <h2 className="text-4xl font-bold tracking-tighter sm:text-6xl">
                 Ready to Transform Your Business?
               </h2>
-              <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+              <p className="max-w-[950px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
                 Book a demo with our sales team to see how our Conversational
                 CRM platform can streamline your sales and support workflows.
               </p>
             </div>
             <Button
-              className="px-8 py-2 text-base font-medium rounded-md"
+              className="px-10 py-3 text-base font-medium rounded-md"
               variant="secondary"
             >
               Book a Demo
@@ -244,11 +244,11 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="flex flex-col gap-2 sm:flex-row py-4 w-full shrink-0 items-center px-4 md:px-6 border-t">
+      <footer className="flex flex-col gap-3 sm:flex-row py-6 w-full shrink-0 items-center px-6 md:px-8 border-t">
         <p className="text-xs text-gray-500 dark:text-gray-400">
           © 2024 Conversational CRM. All rights reserved.
         </p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
+        <nav className="sm:ml-auto flex gap-6 sm:gap-8">
           <Link className="text-xs hover:underline underline-offset-4" href="#">
             Terms of Service
           </Link>
