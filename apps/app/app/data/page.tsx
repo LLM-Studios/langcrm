@@ -13,8 +13,20 @@ import {
   Table2,
 } from "lucide-react";
 import DataTable from "./DataTable";
+import { createServerComponentClient } from "@/lib/supabase/server-client";
+import { redirect } from "next/navigation";
 
-export default function Data() {
+export default async function Data() {
+  const supabase = createServerComponentClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return redirect("/login");
+  }
+  
   return (
     <div className="min-h-screen w-full">
       <header className="flex h-14 lg:h-[60px] items-center px-4 gap-4 border-b bg-gray-100/40 dark:bg-gray-800/40">
