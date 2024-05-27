@@ -53,10 +53,15 @@ export default function Home() {
                     Powerful Insights from Every Interaction
                   </h1>
                   <p className="max-w-[650px] text-gray-500 md:text-xl dark:text-gray-400">
-                    Discover insights to gain a deeper understanding of your customers’ preferences, behaviors, and needs, enhancing your ability to serve them effectively.
+                    Discover insights to gain a deeper understanding of your
+                    customers’ preferences, behaviors, and needs, enhancing your
+                    ability to serve them effectively.
                   </p>
                 </div>
-                <LinkButton className="text-base font-medium flex gap-3" url={process.env.DEMO_CALENDAR_URL}>
+                <LinkButton
+                  className="text-base font-medium flex gap-3"
+                  url={process.env.DEMO_CALENDAR_URL}
+                >
                   <Calendar className="h-5 w-5" />
                   Book a Demo
                 </LinkButton>
