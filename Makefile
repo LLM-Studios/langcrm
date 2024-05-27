@@ -9,9 +9,8 @@ setup:
 	@echo "Setting up doppler"
 	doppler setup
 	@echo "Setting up prisma"
-	doppler run -- bunx prisma migrate dev --schema=./packages/database/prisma/schema.prisma
-	doppler run -- bunx prisma db push --schema=./packages/database/prisma/schema.prisma
-	doppler run -- bunx prisma generate --schema=./packages/database/prisma/schema.prisma
+	doppler run -- bun run prisma:dev
+	doppler run -- bun run prisma:generate
 
 start:
 	@echo "Starting the application..."

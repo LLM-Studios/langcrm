@@ -2,9 +2,12 @@
   "name": "langcrm",
   "private": true,
   "scripts": {
-    "dev": "doppler run -- turbo dev",
+    "dev": "turbo dev",
     "build": "turbo build",
-    "lint": "doppler run --mount .env -- turbo lint",
+    "lint":  "turbo lint",
+    "prisma:deploy": "bunx prisma migrate deploy --schema=./packages/database/prisma/schema.prisma",
+    "prisma:dev": "bunx prisma migrate dev --schema=./packages/database/prisma/schema.prisma",
+    "prisma:generate": "bunx prisma generate --schema=./packages/database/prisma/schema.prisma",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
