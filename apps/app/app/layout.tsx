@@ -1,6 +1,7 @@
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { Analytics } from "@vercel/analytics/react"
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -24,6 +25,7 @@ export default function RootLayout({
       style={{ scrollBehavior: "smooth" }}
     >
       <body className="bg-background text-foreground">
+        <Analytics />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
