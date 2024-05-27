@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { CardContent, Card } from "@/components/ui/card";
-import { BookOpen, Calendar, DatabaseZap, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Calendar, DatabaseZap } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
+import DocumentationButton from "@/components/DocumentationButton";
+import LinkButton from "@/components/LinkButton";
 
 export default function Home() {
   return (
@@ -14,7 +12,7 @@ export default function Home() {
           <DatabaseZap className="h-7 w-7" />
           <span className="">LangCRM</span>
         </Link>
-        <nav className="hidden lg:flex gap-8">
+        {/* <nav className="hidden lg:flex gap-8">
           <Link
             className="text-sm font-medium hover:underline underline-offset-4"
             href="#features"
@@ -39,35 +37,30 @@ export default function Home() {
           >
             Contact
           </Link>
-        </nav>
+        </nav> */}
         <div className="flex gap-3">
           <ThemeToggle />
-          <Button className="hidden md:flex gap-3" variant="secondary">
-            <BookOpen className="h-5 w-5" />
-            Documentation
-          </Button>
+          <DocumentationButton />
         </div>
       </header>
-      <main className="flex-1">
+      <main className="flex-1 flex items-center justify-center">
         <section className="w-full py-10 md:py-14 lg:py-18 xl:py-28">
           <div className="container px-6 md:px-8">
             <div className="grid gap-8 lg:grid-cols-[1fr_600px] lg:gap-14 xl:grid-cols-[1fr_700px]">
               <div className="flex flex-col justify-center space-y-6">
                 <div className="space-y-3">
                   <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl xl:text-7xl">
-                    Unlock the Power of Conversational CRM
+                    Powerful Insights from Every Interaction
                   </h1>
                   <p className="max-w-[650px] text-gray-500 md:text-xl dark:text-gray-400">
-                    Streamline your sales and support workflows with our
-                    AI-powered CRM platform. Engage customers, automate tasks,
-                    and drive growth.
+                    Discover insights to gain a deeper understanding of your customers’ preferences, behaviors, and needs, enhancing your ability to serve them effectively.
                   </p>
                 </div>
-                <Button className="text-base font-medium flex gap-3">
+                <LinkButton className="text-base font-medium flex gap-3" url={process.env.DEMO_CALENDAR_URL}>
                   <Calendar className="h-5 w-5" />
                   Book a Demo
-                </Button>
-                <div className="flex items-center gap-5">
+                </LinkButton>
+                {/* <div className="flex items-center gap-5">
                   <form className="flex items-center w-full gap-3">
                     <Input
                       className="flex-grow"
@@ -76,18 +69,27 @@ export default function Home() {
                     />
                     <Button variant="outline" className="flex gap-3">
                       <Mail className="h-5 w-5" />
-                      Get in Touch
+                      Join waitlist
                     </Button>
                   </form>
-                </div>
+                </div> */}
               </div>
               <div className="relative rounded-xl overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={process.env.DEMO_VIDEO_URL}
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  ></iframe>
+                </div>
               </div>
             </div>
           </div>
         </section>
-        <section id="features" className="w-full py-10 md:py-14 lg:py-18 bg-white dark:bg-gray-900">
+        {/* <section id="features" className="w-full py-10 md:py-14 lg:py-18 bg-white dark:bg-gray-900">
           <div className="container px-6 md:px-8">
             <div className="flex flex-col items-center justify-center space-y-6 text-center">
               <div className="space-y-3">
@@ -242,13 +244,13 @@ export default function Home() {
               Book a Demo
             </Button>
           </div>
-        </section>
+        </section> */}
       </main>
       <footer className="flex flex-col gap-3 sm:flex-row py-6 w-full shrink-0 items-center px-6 md:px-8 border-t">
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          © 2024 Conversational CRM. All rights reserved.
+          © 2024 LLM Studios. All rights reserved.
         </p>
-        <nav className="sm:ml-auto flex gap-6 sm:gap-8">
+        {/* <nav className="sm:ml-auto flex gap-6 sm:gap-8">
           <Link className="text-xs hover:underline underline-offset-4" href="#">
             Terms of Service
           </Link>
@@ -258,7 +260,7 @@ export default function Home() {
           <Link className="text-xs hover:underline underline-offset-4" href="#">
             Imprint
           </Link>
-        </nav>
+        </nav> */}
       </footer>
     </div>
   );
