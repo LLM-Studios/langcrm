@@ -4,7 +4,7 @@ import { createServerComponentClient } from "./server-client";
 export async function getUserWorkspace() {
   const supabase = createServerComponentClient();
   const authId = (
-    await supabase.auth.getUser().catch((err) => {
+    await supabase.auth.getUser().catch((err: Error) => {
       throw new Error("Error getting auth user", err);
     })
   ).data.user?.id;
@@ -14,7 +14,7 @@ export async function getUserWorkspace() {
         authId,
       },
     })
-    .catch((err) => {
+    .catch((err: Error) => {
       throw new Error("Error getting prisma user", err);
     });
   const workspace = await prisma.workspace
@@ -27,7 +27,7 @@ export async function getUserWorkspace() {
         },
       },
     })
-    .catch((err) => {
+    .catch((err: Error) => {
       throw new Error("Error getting workspace", err);
     });
   return { user, workspace };

@@ -64,7 +64,7 @@ export default function TokenSection() {
 
   function copyToken() {
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(token).catch((err) => {
+      navigator.clipboard.writeText(token).catch((err: Error) => {
         throw new Error("Error copying token to clipboard", err);
       });
     } else {

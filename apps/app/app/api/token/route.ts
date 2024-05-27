@@ -10,7 +10,7 @@ export async function GET() {
         workspaceId: workspace!.id,
       },
     })
-    .catch((err) => {
+    .catch((err: Error) => {
       return new Response(
         JSON.stringify({
           error: err,
@@ -38,7 +38,7 @@ export async function POST() {
     headers: {
       Authorization: `Bearer ${process.env.API_URL}`,
     },
-  }).catch((err) => {
+  }).catch((err: Error) => {
     throw new Error("Error generating token", err);
   });
   const data = await response.json();
@@ -50,7 +50,7 @@ export async function POST() {
         workspaceId: workspace!.id,
       },
     })
-    .catch((err) => {
+    .catch((err: Error) => {
       throw new Error("Error creating token", err);
     });
   return new Response(JSON.stringify(token), {
@@ -68,7 +68,7 @@ export async function DELETE() {
         workspaceId: workspace!.id,
       },
     })
-    .catch((err) => {
+    .catch((err: Error) => {
       throw new Error("Error getting token", err);
     });
   await prisma.token
@@ -77,7 +77,7 @@ export async function DELETE() {
         id: token!.id,
       },
     })
-    .catch((err) => {
+    .catch((err: Error) => {
       throw new Error("Error deleting token", err);
     });
   return new Response(

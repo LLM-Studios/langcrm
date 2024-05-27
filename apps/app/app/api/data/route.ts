@@ -12,7 +12,7 @@ export async function GET() {
         key: true,
       },
     })
-    .catch((err) => {
+    .catch((err: Error) => {
       return new Response(
         JSON.stringify({
           success: false,

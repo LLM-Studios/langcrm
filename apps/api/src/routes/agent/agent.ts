@@ -104,8 +104,8 @@ const functions = {
           },
         },
       })
-      .catch((error) => {
-        logger.error({ msg: "Failed to update schema", params, error });
+      .catch((err: Error) => {
+        logger.error({ msg: "Failed to update schema", params, err });
         return "Failed";
       });
     return "Success";
@@ -133,8 +133,8 @@ const functions = {
           },
         },
       })
-      .catch((error) => {
-        logger.error({ msg: "Failed to update schema", params, error });
+      .catch((err: Error) => {
+        logger.error({ msg: "Failed to update schema", params, err });
         return "Failed";
       });
     return "Success";
