@@ -1,6 +1,5 @@
 import prisma from "@repo/database/prisma";
 import { getUserWorkspace } from "@/lib/supabase/utils";
-import { logger } from "@/lib/logger";
 
 export async function GET() {
   const { user, workspace } = await getUserWorkspace();
@@ -12,7 +11,6 @@ export async function GET() {
       },
     })
     .catch((err: Error) => {
-      logger.error(err);
       return new Response(
         JSON.stringify({
           error: err,
@@ -41,7 +39,6 @@ export async function POST() {
       Authorization: `Bearer ${process.env.API_URL}`,
     },
   }).catch((err: Error) => {
-    logger.error(err);
     throw new Error("Error generating token", err);
   });
   const data = await response.json();
@@ -54,7 +51,6 @@ export async function POST() {
       },
     })
     .catch((err: Error) => {
-      logger.error(err);
       throw new Error("Error creating token", err);
     });
   return new Response(JSON.stringify(token), {
@@ -73,7 +69,6 @@ export async function DELETE() {
       },
     })
     .catch((err: Error) => {
-      logger.error(err);
       throw new Error("Error getting token", err);
     });
   await prisma.token
@@ -83,7 +78,6 @@ export async function DELETE() {
       },
     })
     .catch((err: Error) => {
-      logger.error(err);
       throw new Error("Error deleting token", err);
     });
   return new Response(

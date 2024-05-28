@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/card";
 import prisma from "@repo/database/prisma";
 import { createClient } from "@/lib/supabase/server";
-import { logger } from "@/lib/logger";
 
 export default async function Login({
   searchParams,
@@ -42,7 +41,6 @@ export default async function Login({
     });
 
     if (error) {
-      logger.error(error);
       return redirect(`/login?message=${error.message}`);
     }
 
@@ -62,7 +60,6 @@ export default async function Login({
     });
 
     if (error) {
-      logger.error(error);
       return redirect(`/login?message=${error.message}`);
     }
 
@@ -83,7 +80,7 @@ export default async function Login({
         },
       })
       .catch((error) => {
-        logger.error(error);
+        console.error(error);
         throw new Error("Error creating user");
       })
       .then(() => {

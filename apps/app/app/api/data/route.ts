@@ -1,4 +1,3 @@
-import { logger } from "@/lib/logger";
 import { getUserWorkspace } from "@/lib/supabase/utils";
 import prisma from "@repo/database/prisma";
 
@@ -14,7 +13,6 @@ export async function GET() {
       },
     })
     .catch((err: Error) => {
-      logger.error(err);
       return new Response(
         JSON.stringify({
           success: false,

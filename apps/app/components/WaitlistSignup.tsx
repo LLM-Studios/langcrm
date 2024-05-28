@@ -13,6 +13,8 @@ export default function WaitlistSignup() {
   async function handleSubmit() {
     setIsLoading(true);
 
+    console.log("email", email);
+
     const response = await fetch("/api/waitlist", {
       method: "POST",
       body: JSON.stringify({ email }),
