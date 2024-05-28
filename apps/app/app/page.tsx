@@ -3,6 +3,7 @@ import { Calendar, DatabaseZap } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import DocumentationButton from "@/components/DocumentationButton";
 import LinkButton from "@/components/LinkButton";
+import WaitlistSignup from "@/components/WaitlistSignup";
 
 export default function Home() {
   return (
@@ -50,7 +51,7 @@ export default function Home() {
               <div className="flex flex-col justify-center space-y-6">
                 <div className="space-y-3">
                   <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl xl:text-7xl">
-                    Powerful Insights from Every Interaction
+                    Powerful Insights from Every Conversation
                   </h1>
                   <p className="max-w-[650px] text-gray-500 md:text-xl dark:text-gray-400">
                     Discover insights to gain a deeper understanding of your
@@ -65,19 +66,9 @@ export default function Home() {
                   <Calendar className="h-5 w-5" />
                   Book a Demo
                 </LinkButton>
-                {/* <div className="flex items-center gap-5">
-                  <form className="flex items-center w-full gap-3">
-                    <Input
-                      className="flex-grow"
-                      placeholder="Enter your email"
-                      type="email"
-                    />
-                    <Button variant="outline" className="flex gap-3">
-                      <Mail className="h-5 w-5" />
-                      Join waitlist
-                    </Button>
-                  </form>
-                </div> */}
+                <div className="flex items-center gap-5">
+                  <WaitlistSignup />
+                </div>
               </div>
               <div className="relative rounded-xl overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent">

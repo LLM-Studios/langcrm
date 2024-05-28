@@ -67,7 +67,7 @@ model Workspace {
 
 model User {
   id            String      @id @default(uuid())
-  authId        String     @unique
+  authId        String
   email         String
   status        UserStatus  @default(ACTIVE)
   role          Role        @default(USER)
