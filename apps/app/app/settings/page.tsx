@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import SchemaSection from "./SchemaSection";
 
 export default async function Settings() {
   const supabase = createClient();
@@ -43,13 +44,19 @@ function Main() {
       <div className="grid gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr] items-start">
         <nav className="text-sm text-gray-500 grid gap-4 dark:text-gray-400">
           <Link
-            href="#"
+            href="#token"
             className="font-semibold text-gray-900 dark:text-gray-50"
           >
             Token
           </Link>
           <Link
-            href="#"
+            href="#schema"
+            className="font-semibold text-gray-900 dark:text-gray-50"
+          >
+            Schema
+          </Link>
+          <Link
+            href="#help"
             className="font-semibold text-gray-900 dark:text-gray-50"
           >
             Help
@@ -57,6 +64,7 @@ function Main() {
         </nav>
         <div className="grid gap-6">
           <TokenSection />
+          <SchemaSection />
           <HelpSection />
         </div>
       </div>
