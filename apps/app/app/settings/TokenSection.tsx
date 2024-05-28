@@ -95,7 +95,12 @@ export default function TokenSection() {
       </CardHeader>
       <CardContent>
         <form>
-          <Input placeholder="LANGCRM_API_TOKEN" value={token} readOnly />
+          <Input
+            placeholder="LANGCRM_API_TOKEN"
+            value={token}
+            readOnly
+            type="password"
+          />
         </form>
       </CardContent>
       <CardFooter className="flex flex-row gap-4 border-t p-6">

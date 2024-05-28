@@ -62,19 +62,29 @@ export default function ValuesTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((item) => (
+              {!data.length ? (
                 <TableRow>
-                  <TableCell>{item.key.id}</TableCell>
-                  <TableCell className="font-medium">{item.value}</TableCell>
-                  <TableCell>{item.key.description}</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    {item.distinctId}
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    {item.createdAt.toString()}
-                  </TableCell>
+                  <TableCell>No data available</TableCell>
+                  <TableCell>-</TableCell>
+                  <TableCell>-</TableCell>
+                  <TableCell>-</TableCell>
+                  <TableCell>-</TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                data.map((item) => (
+                  <TableRow>
+                    <TableCell>{item.key.id}</TableCell>
+                    <TableCell className="font-medium">{item.value}</TableCell>
+                    <TableCell>{item.key.description}</TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {item.distinctId}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {item.createdAt.toString()}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         )}
