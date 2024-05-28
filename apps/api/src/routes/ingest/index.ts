@@ -5,7 +5,7 @@ import prisma from "@repo/database/prisma";
 
 const route = (app: App) =>
   app.post(
-    "/agent",
+    "/ingest",
     async ({ body, logger, store }) => {
       const { input, distinctId } = body;
       agent.metadata = {
