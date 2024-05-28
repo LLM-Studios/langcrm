@@ -1,4 +1,3 @@
-import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
 import { Input } from "@/components/ui/input";
@@ -12,14 +11,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import prisma from "@repo/database/prisma";
-import { createServerComponentClient } from "@/lib/supabase/server-client";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function Login({
   searchParams,
 }: {
   searchParams: { message: string };
 }) {
-  const supabase = createServerComponentClient();
+  const supabase = createClient();
 
   const {
     data: { user },

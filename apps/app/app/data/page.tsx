@@ -1,10 +1,10 @@
 import ValuesTable from "./ValuesTable";
-import { createServerComponentClient } from "@/lib/supabase/server-client";
 import { redirect } from "next/navigation";
 import Header from "@/components/Header";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function Data() {
-  const supabase = createServerComponentClient();
+  const supabase = createClient();
 
   const {
     data: { user },

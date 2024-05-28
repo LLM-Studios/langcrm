@@ -1,6 +1,5 @@
 import Link from "next/link";
 import TokenSection from "./TokenSection";
-import { createServerComponentClient } from "@/lib/supabase/server-client";
 import { redirect } from "next/navigation";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -12,9 +11,10 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Mail } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function Settings() {
-  const supabase = createServerComponentClient();
+  const supabase = createClient();
 
   const {
     data: { user },

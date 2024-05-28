@@ -1,8 +1,8 @@
 import prisma from "@repo/database/prisma";
-import { createServerComponentClient } from "./server-client";
+import { createClient } from "./server";
 
 export async function getUserWorkspace() {
-  const supabase = createServerComponentClient();
+  const supabase = createClient();
   const authId = (
     await supabase.auth.getUser().catch((err: Error) => {
       throw new Error("Error getting auth user", err);
