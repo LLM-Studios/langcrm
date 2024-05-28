@@ -1,7 +1,8 @@
 import { logger } from "$lib/logger";
 import OpenAI from "openai";
+import { observeOpenAI } from "langfuse";
 
-const openai = new OpenAI();
+const openai = observeOpenAI(new OpenAI());
 
 /**
  * Agent

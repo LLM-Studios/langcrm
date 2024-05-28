@@ -105,7 +105,7 @@ const functions = {
         },
       })
       .catch((err: Error) => {
-        logger.error({ msg: "Failed to update schema", params, err });
+        logger.error({ msg: "Failed to extend schema", params, err });
         return "Failed";
       });
     return "Success";
