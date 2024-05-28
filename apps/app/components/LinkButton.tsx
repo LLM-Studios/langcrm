@@ -1,25 +1,24 @@
 "use client";
 
-import { Button } from "./ui/button";
+import { Button, ButtonProps } from "./ui/button";
 import * as React from "react";
 
 export default function LinkButton({
   children,
   url,
-  className,
+  ...props
 }: {
   url: string | undefined;
-  className: string;
   children: React.ReactNode;
-}) {
+} & ButtonProps) {
   return (
     <Button
-      className={className}
       onClick={() => {
         if (url) {
           window.open(url, "_blank");
         }
       }}
+      {...props}
     >
       {children}
     </Button>

@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { Calendar, DatabaseZap } from "lucide-react";
+import { BookOpen, Calendar, DatabaseZap } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
-import DocumentationButton from "@/components/DocumentationButton";
 import LinkButton from "@/components/LinkButton";
 import WaitlistSignup from "@/components/WaitlistSignup";
 
@@ -41,7 +40,14 @@ export default function Home() {
         </nav> */}
         <div className="flex gap-3">
           <ThemeToggle />
-          <DocumentationButton />
+          <LinkButton
+            url={`${process.env.API_URL}/docs`}
+            className="hidden md:flex gap-3"
+            variant="secondary"
+          >
+            <BookOpen className="h-5 w-5" />
+            Documentation
+          </LinkButton>
         </div>
       </header>
       <main className="flex-1 flex items-center justify-center">
@@ -60,8 +66,8 @@ export default function Home() {
                   </p>
                 </div>
                 <LinkButton
-                  className="text-base font-medium flex gap-3"
                   url={process.env.DEMO_CALENDAR_URL}
+                  className="text-base font-medium flex gap-3"
                 >
                   <Calendar className="h-5 w-5" />
                   Book a Demo
