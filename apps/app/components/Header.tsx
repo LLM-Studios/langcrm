@@ -43,7 +43,7 @@ export default function Header() {
     },
   ];
   return (
-    <header className="flex h-14 lg:h-[60px] items-center px-4 gap-4 border-b bg-gray-100/40 dark:bg-gray-800/40">
+    <header className="flex h-14 lg:h-[60px] items-center px-4 gap-4 border-b">
       <Link className="md:hidden" href="#">
         <DatabaseZap className="h-6 w-6" />
         <span className="sr-only">Home</span>
