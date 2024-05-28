@@ -2,8 +2,6 @@ import { logger } from "$lib/logger";
 import OpenAI from "openai";
 import { observeOpenAI } from "langfuse";
 
-const openai = observeOpenAI(new OpenAI());
-
 /**
  * Agent
  * @class
@@ -55,6 +53,9 @@ export class Agent {
     prompt_extra?: string;
   }): Promise<string | null> {
     const { messages, prompt_extra } = params;
+    const openai = observeOpenAI(new OpenAI(), {
+      metadata: this.metadata,
+    });
     const completion = await openai.chat.completions.create({
       model: this.model,
       tools: this.tools,

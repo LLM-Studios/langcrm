@@ -11,6 +11,7 @@ const route = (app: App) =>
       agent.metadata = {
         distinctId: distinctId,
         workspaceId: store.token.workspaceId,
+        userId: store.token.userId,
       };
       const keys = await prisma.key.findMany({
         where: {
