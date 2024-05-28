@@ -12,12 +12,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import prisma from "@repo/database/prisma";
+import { createServerComponentClient } from "@/lib/supabase/server-client";
 
-export default function Login({
+export default async function Login({
   searchParams,
 }: {
   searchParams: { message: string };
 }) {
+  const supabase = createServerComponentClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    return redirect("/data");
+  }
+
   const signIn = async (formData: FormData) => {
     "use server";
 
@@ -34,7 +45,7 @@ export default function Login({
       return redirect(`/login?message=${error.message}`);
     }
 
-    return redirect("/settings");
+    return redirect("/data");
   };
 
   const signUp = async (formData: FormData) => {
