@@ -1,9 +1,8 @@
+import { logger } from "@/lib/logger";
 import prisma from "@repo/database/prisma";
 
 export async function POST(req: Request) {
   const { email } = await req.json();
-
-  console.log("email", email);
 
   await prisma.user
     .create({
@@ -14,6 +13,7 @@ export async function POST(req: Request) {
       },
     })
     .catch((err: Error) => {
+      logger.error(err);
       throw new Error(err.message, err);
     });
 

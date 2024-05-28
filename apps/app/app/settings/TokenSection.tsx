@@ -63,13 +63,9 @@ export default function TokenSection() {
   }
 
   function copyToken() {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(token).catch((err: Error) => {
-        throw new Error("Error copying token to clipboard", err);
-      });
-    } else {
-      console.error("Clipboard API not available");
-    }
+    navigator.clipboard.writeText(token).catch((err: Error) => {
+      throw new Error("Error copying token to clipboard", err);
+    });
   }
 
   async function deleteToken() {

@@ -27,6 +27,8 @@
     "lucide-react": "^0.379.0",
     "next": "latest",
     "next-themes": "^0.3.0",
+    "pino": "^9.1.0",
+    "pino-pretty": "^11.1.0",
     "postcss": "8.4.33",
     "react": "18.2.0",
     "react-dom": "18.2.0",
