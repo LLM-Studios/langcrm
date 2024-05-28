@@ -12,7 +12,11 @@ const route = (app: App) =>
         distinctId: distinctId,
         workspaceId: store.token.workspaceId,
       };
-      const keys = await prisma.key.findMany().then((keys) => {
+      const keys = await prisma.key.findMany({
+        where: {
+          workspaceId: store.token.workspaceId,
+        },
+      }).then((keys) => {
         const ids = keys.map((key) => key.id);
         logger.debug({ ids });
         return ids;

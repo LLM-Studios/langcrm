@@ -91,6 +91,7 @@ const functions = {
           description,
           type,
           priority,
+          workspaceId: metadata.workspaceId,
           values: {
             create: {
               value,
