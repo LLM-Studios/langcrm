@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "bun run --watch src/index.ts",
     "build": "bun build src/index.ts --target bun",
-    "prisma:deploy": "cd ../.. && bun run prisma:deploy && cd apps/api",
+    "prisma:deploy": "cd ../.. && bun run prisma:deploy && bun run prisma:generate && cd apps/api",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
