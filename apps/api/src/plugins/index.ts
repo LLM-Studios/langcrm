@@ -16,11 +16,7 @@ const swaggerPlugin = () =>
           version: "1.0.0",
         },
       },
-      exclude: [
-        "/docs",
-        "/docs/json",
-        "/token/{id}",
-      ],
+      exclude: ["/docs", "/docs/json", "/token/{id}"],
     }),
   );
 

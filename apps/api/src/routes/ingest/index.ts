@@ -13,15 +13,17 @@ const route = (app: App) =>
         workspaceId: store.token.workspaceId,
         userId: store.token.userId,
       };
-      const keys = await prisma.key.findMany({
-        where: {
-          workspaceId: store.token.workspaceId,
-        },
-      }).then((keys) => {
-        const ids = keys.map((key) => key.id);
-        logger.debug({ ids });
-        return ids;
-      });
+      const keys = await prisma.key
+        .findMany({
+          where: {
+            workspaceId: store.token.workspaceId,
+          },
+        })
+        .then((keys) => {
+          const ids = keys.map((key) => key.id);
+          logger.debug({ ids });
+          return ids;
+        });
       const output = await agent.invoke({
         messages: [
           {
