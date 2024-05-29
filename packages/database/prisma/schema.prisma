@@ -43,8 +43,8 @@ model Value {
   value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  key       Key      @relation(fields: [keyId], references: [id])
-  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  key       Key      @relation(fields: [keyId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 model Question {
@@ -53,7 +53,7 @@ model Question {
   question  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  key       Key      @relation(fields: [keyId], references: [id])
+  key       Key      @relation(fields: [keyId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 model Workspace {
@@ -99,8 +99,8 @@ model Token {
   id String @id @default(uuid())
   value String @unique
   userId String
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   workspaceId String
-  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
