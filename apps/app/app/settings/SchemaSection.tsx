@@ -99,7 +99,7 @@ function AddToSchema({
         onChange={(e) => setDescription(e.target.value)}
       />
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
           <Button variant={"secondary"} className="flex flex-row gap-2">
             <ChevronDown className="h-4 w-4" />
             {priority || "Priority"}
@@ -124,7 +124,7 @@ function AddToSchema({
         </DropdownMenuContent>
       </DropdownMenu>
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
           <Button variant={"secondary"} className="flex flex-row gap-2">
             <ChevronDown className="h-4 w-4" />
             {type || "Type"}
