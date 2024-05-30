@@ -84,14 +84,16 @@ export default function Header() {
             {items.map((item) => {
               const isPath = pathname === item.href;
               return (
-                <Link
-                  key={item.href}
-                  className={`flex items-center gap-2 rounded-lg ${isPath ? "bg-gray-100 dark:bg-gray-800" : ""} px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 ${isPath ? "text-gray-900 dark:text-gray-50" : ""}`}
-                  href={item.href}
-                >
-                  {item.icon}
-                  {item.label}
-                </Link>
+                <Button variant={isPath ? "secondary" : "ghost"} asChild>
+                  <Link
+                    key={item.href}
+                    className={`flex items-center gap-2`}
+                    href={item.href}
+                  >
+                    {item.icon}
+                    {item.label}
+                  </Link>
+                </Button>
               );
             })}
             <Button

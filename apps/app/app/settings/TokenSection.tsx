@@ -25,7 +25,7 @@ import {
 import { Plus, Copy, Trash2, Check, X, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function TokenSection() {
+export default function TokenSection({ ...props }) {
   const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -88,7 +88,7 @@ export default function TokenSection() {
   }
 
   return (
-    <Card>
+    <Card {...props}>
       <CardHeader>
         <CardTitle>Token</CardTitle>
         <CardDescription>Your API token</CardDescription>

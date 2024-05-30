@@ -24,34 +24,50 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
-import { ChevronDown, Plus, Trash2 } from "lucide-react";
+import { ChevronDown, Loader2, Plus, RefreshCcw, RotateCcw, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Key as KeyType } from "@prisma/client";
 
-export default function SchemaSection() {
+export default function SchemaSection({ ...props }) {
   const [schema, setSchema] = useState<KeyType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getSchema();
   }, []);
 
   async function getSchema() {
+    setIsLoading(true);
     const response = await fetch("/api/schema");
     const data = await response.json();
     setSchema(data);
+    setIsLoading(false);
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Schema</CardTitle>
-        <CardDescription>Manage your schema</CardDescription>
+    <Card {...props}>
+      <CardHeader className="flex flex-row justify-between">
+        <div>
+          <CardTitle>Schema</CardTitle>
+          <CardDescription>Manage your schema</CardDescription>
+        </div>
+        <Button onClick={getSchema} variant={"outline"}>
+          <RotateCcw
+            className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+          />
+        </Button>
       </CardHeader>
       <CardContent>
         <AddToSchema schema={schema} setSchema={setSchema} />
       </CardContent>
       <CardFooter>
-        <CurrentSchema schema={schema} setSchema={setSchema} />
+        {isLoading ? (
+          <div className="flex justify-center items-center h-24 w-full">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        ) : (
+          <CurrentSchema schema={schema} setSchema={setSchema} />
+        )}
       </CardFooter>
     </Card>
   );
@@ -83,6 +99,10 @@ function AddToSchema({
     if (response.ok) {
       const data = await response.json();
       setSchema([...schema, data]);
+      setKey("");
+      setDescription("");
+      setType("");
+      setPriority("");
     }
   };
 
@@ -188,7 +208,7 @@ function CurrentSchema({
           </TableRow>
         ) : (
           schema.map((item) => (
-            <TableRow>
+            <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
               <TableCell className="font-medium">{item.description}</TableCell>
               <TableCell>{item.priority}</TableCell>
@@ -196,7 +216,7 @@ function CurrentSchema({
                 {item.type}
               </TableCell>
               <TableCell className="hidden md:table-cell">
-                {item.tags ? item.tags.join(", ") : "-"}
+                {item.tags && item.tags.length ? item.tags.join(", ") : "-"}
               </TableCell>
               <TableCell>
                 <Button

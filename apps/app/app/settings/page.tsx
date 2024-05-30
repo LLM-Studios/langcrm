@@ -13,6 +13,7 @@ import {
 import { Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import SchemaSection from "./SchemaSection";
+import LinkButton from "@/components/LinkButton";
 
 export default async function Settings() {
   const supabase = createClient();
@@ -63,27 +64,27 @@ function Main() {
           </Link>
         </nav>
         <div className="grid gap-6">
-          <TokenSection />
-          <SchemaSection />
-          <HelpSection />
+          <TokenSection id="token" />
+          <SchemaSection id="schema" />
+          <HelpSection id="help" />
         </div>
       </div>
     </>
   );
 }
 
-function HelpSection() {
+function HelpSection({ ...props }) {
   return (
-    <Card>
+    <Card {...props}>
       <CardHeader>
         <CardTitle>Help</CardTitle>
         <CardDescription>Get in touch with the team</CardDescription>
       </CardHeader>
       <CardContent>
-        <Button variant={"secondary"} className="flex flex-row gap-2">
+        <LinkButton url="mailto:support@langcrm.com" variant={"secondary"} className="flex flex-row gap-2">
           <Mail className="h-4 w-4" />
           Contact
-        </Button>
+        </LinkButton>
       </CardContent>
     </Card>
   );
