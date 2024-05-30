@@ -8,7 +8,7 @@
     "prisma:deploy": "bunx prisma migrate deploy --schema=./packages/database/prisma/schema.prisma",
     "prisma:dev": "bunx prisma migrate dev --schema=./packages/database/prisma/schema.prisma",
     "prisma:generate": "bunx prisma generate --schema=./packages/database/prisma/schema.prisma",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\" && bunx prisma format --schema=./packages/database/prisma/schema.prisma"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
