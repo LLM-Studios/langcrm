@@ -6,7 +6,7 @@ import prisma from "@repo/database/prisma";
 const route = (app: App) =>
   app.post(
     "/ingest",
-    async ({ body, logger, store }) => {
+    async ({ body, store }) => {
       const { input, distinctId } = body;
       agent.metadata = {
         distinctId: distinctId,
@@ -18,12 +18,15 @@ const route = (app: App) =>
           where: {
             workspaceId: store.token.workspaceId,
           },
-        })
-        .then((keys) => {
-          const ids = keys.map((key) => key.id);
-          logger.debug({ ids });
-          return ids;
+          include: {
+            values: {
+              where: {
+                distinctId: distinctId,
+              },
+            },
+          },
         });
+      const schema = keys.map((key) => `${key.id} - ${key.description}: ${key.values.map((value) => value.value).join(", ")}`).join("\n");
       const output = await agent.invoke({
         messages: [
           {
@@ -31,7 +34,14 @@ const route = (app: App) =>
             content: input,
           },
         ],
-        prompt_extra: `These keys already exist, they can only be used for updating, not for extending the schema: ${keys.join(", ")}.`,
+        prompt_extra: 
+        `The following information is already known about the user. 
+You can use these keys to update information if it is subject to change based on the given input. 
+        
+${schema}
+
+If some information about the user is missing, you can use the 'update_schema' tool for keys listed above or the 'extend_schema' tool to add new keys. 
+Based on the all of the information on the user you can infer what information is missing and add it to the schema using your tools.`,
       });
       return Response.json({
         input,

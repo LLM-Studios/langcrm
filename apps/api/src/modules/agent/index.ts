@@ -60,7 +60,7 @@ export class Agent {
       model: this.model,
       tools: this.tools,
       messages: [
-        { role: "system", content: this.system_prompt + (prompt_extra || "") },
+        { role: "system", content: this.system_prompt + "\n\n" + (prompt_extra || "") },
         ...this.examples,
         ...messages,
       ],
