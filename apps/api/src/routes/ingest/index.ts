@@ -13,20 +13,32 @@ const route = (app: App) =>
         workspaceId: store.token.workspaceId,
         userId: store.token.userId,
       };
-      const keys = await prisma.key
-        .findMany({
-          where: {
-            workspaceId: store.token.workspaceId,
-          },
-          include: {
-            values: {
-              where: {
-                distinctId: distinctId,
-              },
+      const keys = await prisma.key.findMany({
+        where: {
+          workspaceId: store.token.workspaceId,
+        },
+        include: {
+          values: {
+            where: {
+              distinctId: distinctId,
             },
           },
-        });
-      const schema = keys.map((key) => `${key.id} - ${key.description}: ${key.values.map((value) => value.value).join(", ")}`).join("\n");
+        },
+      });
+      const schema =
+        keys.length > 0
+          ? keys
+              .map(
+                (key) =>
+                  `${key.id} - ${key.description}: ${key.values
+                    .map((value) => value.value)
+                    .filter(
+                      (value, index, array) => array.indexOf(value) === index,
+                    )
+                    .join(", ")}`,
+              )
+              .join("\n")
+          : "Empty - use the 'extend_schema' tool to add a key and value.";
       const output = await agent.invoke({
         messages: [
           {
@@ -34,14 +46,9 @@ const route = (app: App) =>
             content: input,
           },
         ],
-        prompt_extra: 
-        `The following information is already known about the user. 
-You can use these keys to update information if it is subject to change based on the given input. 
-        
-${schema}
-
-If some information about the user is missing, you can use the 'update_schema' tool for keys listed above or the 'extend_schema' tool to add new keys. 
-Based on the all of the information on the user you can infer what information is missing and add it to the schema using your tools.`,
+        prompt_args: {
+          schema,
+        },
       });
       return Response.json({
         input,
