@@ -15,6 +15,7 @@ import {
   SettingsIcon,
   BookOpen,
   LogOut,
+  Braces,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -35,6 +36,11 @@ export default function Header() {
       icon: <Table2 className="h-4 w-4" />,
       href: "/data",
       label: "Data",
+    },
+    {
+      icon: <Braces className="h-4 w-4" />,
+      href: "/schema",
+      label: "Schema",
     },
     {
       icon: <SettingsIcon className="h-4 w-4" />,

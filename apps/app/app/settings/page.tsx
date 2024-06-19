@@ -2,7 +2,6 @@ import Link from "next/link";
 import TokenSection from "./TokenSection";
 import { redirect } from "next/navigation";
 import Header from "@/components/Header";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -12,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import SchemaSection from "./SchemaSection";
 import LinkButton from "@/components/LinkButton";
 
 export default async function Settings() {
@@ -29,16 +27,14 @@ export default async function Settings() {
   return (
     <div className="min-h-screen w-full">
       <Header />
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-        <Main />
-      </main>
+      <Main />
     </div>
   );
 }
 
 function Main() {
   return (
-    <>
+    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="flex items-center">
         <h1 className="font-semibold text-lg md:text-2xl">Settings</h1>
       </div>
@@ -51,12 +47,6 @@ function Main() {
             Token
           </Link>
           <Link
-            href="#schema"
-            className="font-semibold text-gray-900 dark:text-gray-50"
-          >
-            Schema
-          </Link>
-          <Link
             href="#help"
             className="font-semibold text-gray-900 dark:text-gray-50"
           >
@@ -65,11 +55,10 @@ function Main() {
         </nav>
         <div className="grid gap-6">
           <TokenSection id="token" />
-          <SchemaSection id="schema" />
           <HelpSection id="help" />
         </div>
       </div>
-    </>
+    </main>
   );
 }
 
@@ -81,7 +70,11 @@ function HelpSection({ ...props }) {
         <CardDescription>Get in touch with the team</CardDescription>
       </CardHeader>
       <CardContent>
-        <LinkButton url="mailto:support@langcrm.com" variant={"secondary"} className="flex flex-row gap-2">
+        <LinkButton
+          url="mailto:support@langcrm.com"
+          variant={"secondary"}
+          className="flex flex-row gap-2"
+        >
           <Mail className="h-4 w-4" />
           Contact
         </LinkButton>

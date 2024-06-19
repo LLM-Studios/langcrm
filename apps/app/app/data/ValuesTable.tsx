@@ -37,58 +37,49 @@ export default function ValuesTable() {
   }
 
   return (
-    <>
-      <div className="flex items-center">
-        <h1 className="font-semibold text-lg md:text-2xl">Data</h1>
-      </div>
-      <div className="border shadow-sm rounded-lg">
-        {isLoading ? (
-          <div className="flex justify-center items-center h-24 w-full">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
-        ) : (
-          <Table>
-            <TableHeader>
+    <div className="border shadow-sm rounded-lg">
+      {isLoading ? (
+        <div className="flex justify-center items-center h-24 w-full">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="max-w-[150px]">key</TableHead>
+              <TableHead className="max-w-[150px]">value</TableHead>
+              <TableHead className="max-w-[150px]">description</TableHead>
+              <TableHead className="hidden md:table-cell">distinctId</TableHead>
+              <TableHead className="hidden md:table-cell">createdAt</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {!data.length ? (
               <TableRow>
-                <TableHead className="max-w-[150px]">key</TableHead>
-                <TableHead className="max-w-[150px]">value</TableHead>
-                <TableHead className="max-w-[150px]">description</TableHead>
-                <TableHead className="hidden md:table-cell">
-                  distinctId
-                </TableHead>
-                <TableHead className="hidden md:table-cell">
-                  createdAt
-                </TableHead>
+                <TableCell>No data available</TableCell>
+                <TableCell>-</TableCell>
+                <TableCell>-</TableCell>
+                <TableCell>-</TableCell>
+                <TableCell>-</TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {!data.length ? (
+            ) : (
+              data.map((item) => (
                 <TableRow>
-                  <TableCell>No data available</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>-</TableCell>
+                  <TableCell>{item.key.id}</TableCell>
+                  <TableCell className="font-medium">{item.value}</TableCell>
+                  <TableCell>{item.key.description}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {item.distinctId}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {item.createdAt.toString()}
+                  </TableCell>
                 </TableRow>
-              ) : (
-                data.map((item) => (
-                  <TableRow>
-                    <TableCell>{item.key.id}</TableCell>
-                    <TableCell className="font-medium">{item.value}</TableCell>
-                    <TableCell>{item.key.description}</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      {item.distinctId}
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      {item.createdAt.toString()}
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        )}
-      </div>
-    </>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      )}
+    </div>
   );
 }
