@@ -21,6 +21,16 @@ const route = (app: App) =>
       });
 
       return data;
+    })
+    .delete("/data/:id", async ({ params, store }) => {
+      const data = await prisma.value.deleteMany({
+        where: {
+          workspaceId: store.token.workspaceId,
+          distinctId: params.id,
+        },
+      });
+
+      return data;
     });
 
 export default route;
