@@ -6,8 +6,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
-} from "@radix-ui/react-dropdown-menu";
+} from "@/components/ui/dropdown-menu";
+import { Card } from "@/components/ui/card";
 import {
   DatabaseZap,
   Menu,
@@ -50,39 +50,38 @@ export default function Header() {
   ];
   return (
     <header className="flex h-14 lg:h-[60px] items-center px-4 gap-4 border-b">
-      <Link className="md:hidden" href="#">
-        <DatabaseZap className="h-6 w-6" />
-        <span className="sr-only">Home</span>
-      </Link>
       <Link
-        className="hidden md:flex items-center gap-2 font-semibold"
+        className="flex items-center gap-2 font-semibold"
         href="/data"
       >
         <DatabaseZap className="h-6 w-6" />
-        <span className="">LangCRM</span>
+        <span className="hidden md:block">LangCRM</span>
       </Link>
       <div className="flex-1 overflow-auto py-2">
         <nav className="flex items-center justify-end text-sm font-medium gap-2">
           <ThemeToggle />
-          <div className="md:hidden rounded-lg bg-gray-100 px-3 py-2 text-gray-900 transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50">
+          <div className="md:hidden">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Menu className="h-6 w-6" />
+                <Button variant="outline" size="icon">
+                  <Menu className="h-[1.2rem] w-[1.2rem]" />
+                </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <Link className="flex flex-row gap-4 p-2" href="#">
-                    <Table2 className="h-4 w-4" />
-                    Data
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Link className="flex flex-row gap-4 p-2" href="#">
-                    <SettingsIcon className="h-4 w-4" />
-                    Settings
-                  </Link>
-                </DropdownMenuItem>
+              <DropdownMenuContent className="gap-2 p-2 rounded-lg" asChild>
+                <Card>
+                {items.map((item) => (
+                    <DropdownMenuItem className="p-2" key={item.href}>
+                      <Link
+                        key={item.href}
+                        className={`flex items-center gap-2`}
+                        href={item.href}
+                      >
+                        {item.icon}
+                        {item.label}
+                      </Link>
+                    </DropdownMenuItem>
+                ))}
+                </Card>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -90,9 +89,8 @@ export default function Header() {
             {items.map((item) => {
               const isPath = pathname === item.href;
               return (
-                <Button variant={isPath ? "secondary" : "ghost"} asChild>
+                <Button key={item.href} variant={isPath ? "secondary" : "ghost"} asChild>
                   <Link
-                    key={item.href}
                     className={`flex items-center gap-2`}
                     href={item.href}
                   >
