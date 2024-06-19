@@ -5,6 +5,8 @@ import token from "./token";
 import data from "./data";
 import schema from "./schema";
 
-const api = new Elysia().use(auth).use(agent).use(token).use(data).use(schema);
+const api = new Elysia().group("/api", (app) =>
+  app.use(auth).use(agent).use(token).use(data).use(schema),
+);
 
 export default api;
