@@ -17,8 +17,17 @@ const route = (app: App) =>
       "/schema",
       async ({ body, store }) => {
         const { name, description, type, priority, tags } = body;
-        const data = await prisma.key.create({
-          data: {
+        const data = await prisma.key.upsert({
+          where: {
+            id: name,
+          },
+          update: {
+            description,
+            type,
+            priority,
+            tags,
+          },
+          create: {
             id: name,
             workspaceId: store.token.workspaceId,
             description,

@@ -13,6 +13,7 @@ import { Loader2, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Key as KeyType } from "@prisma/client";
 import SchemaInput from "./SchemaInput";
+import EditSchemaButton from "./EditSchemaButton";
 
 export default function SchemaTable({ ...props }) {
   const [schema, setSchema] = useState<KeyType[]>([]);
@@ -71,6 +72,7 @@ function CurrentSchema({
       setSchema(schema.filter((item) => item.id !== id));
     }
   }
+
   return (
     <div className="border shadow-sm rounded-lg">
       {isLoading ? (
@@ -98,29 +100,32 @@ function CurrentSchema({
                 <TableCell>-</TableCell>
               </TableRow>
             ) : (
-              schema.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.id}</TableCell>
-                  <TableCell className="font-medium">
-                    {item.description}
-                  </TableCell>
-                  <TableCell>{item.priority}</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    {item.type}
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    {item.tags && item.tags.length ? item.tags.join(", ") : "-"}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant={"destructive"}
-                      onClick={() => handleDelete(item.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
+              schema.map((item, i) => {
+                return (
+                  <TableRow key={item.id}>
+                    <TableCell>{item.id}</TableCell>
+                    <TableCell className="font-medium">
+                      {item.description}
+                    </TableCell>
+                    <TableCell>{item.priority}</TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {item.type}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {item.tags && item.tags.length ? item.tags.join(", ") : "-"}
+                    </TableCell>
+                    <TableCell className="flex flex-row gap-2 justify-end">
+                      <EditSchemaButton item={item} onSuccess={(data) => setSchema(schema.map((item, index) => index === i ? data : item))}/>
+                      <Button
+                        variant={"destructive"}
+                        onClick={() => handleDelete(item.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             )}
           </TableBody>
         </Table>
@@ -128,3 +133,4 @@ function CurrentSchema({
     </div>
   );
 }
+

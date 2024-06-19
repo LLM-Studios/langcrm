@@ -23,13 +23,14 @@ export default function SchemaInput({
   getSchema: () => void;
   isLoading: boolean;
 }) {
-  const [key, setKey] = useState("");
+  const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
   const [priority, setPriority] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
 
   const handleSubmit = async () => {
-    if (!key || !description || !type || !priority) {
+    if (!name || !description || !type || !priority) {
       return;
     }
     const response = await fetch("/api/schema", {
@@ -37,12 +38,12 @@ export default function SchemaInput({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ key, description, type, priority }),
+      body: JSON.stringify({ name, description, type, priority }),
     });
     if (response.ok) {
       const data = await response.json();
       setSchema([...schema, data]);
-      setKey("");
+      setName("");
       setDescription("");
       setType("");
       setPriority("");
@@ -55,14 +56,19 @@ export default function SchemaInput({
         <RotateCcw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
       </Button>
       <Input
-        placeholder="Key"
-        value={key}
-        onChange={(e) => setKey(e.target.value)}
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
       />
       <Input
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+      />
+      <Input
+        placeholder="Tags"
+        value={tags.join(",")}
+        onChange={(e) => setTags(e.target.value.split(","))}
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

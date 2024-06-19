@@ -29,16 +29,26 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const { workspace } = await getUserWorkspace();
-  const { key, description, type, priority } = await req.json();
-  const schema = await prisma.key
-    .create({
-      data: {
-        id: key,
+  const { name, description, type, priority } = await req.json();
+  const key = await prisma.key
+    .upsert({
+      where: {
+        id: name,
+        workspaceId: workspace!.id,
+      },
+      update: {
         description,
         type,
         priority,
         workspaceId: workspace!.id,
       },
+      create: {
+        id: name,
+        description,
+        type,
+        priority,
+        workspaceId: workspace!.id,
+      },  
     })
     .catch((err: Error) => {
       console.log(err);
@@ -48,13 +58,13 @@ export async function POST(req: Request) {
         }),
         {
           status: 200,
-          statusText: "Key not created",
+          statusText: "Key not upserted",
         },
       );
     });
-  return new Response(JSON.stringify(schema), {
+  return new Response(JSON.stringify(key), {
     status: 200,
-    statusText: "Key created",
+    statusText: "Key upserted",
   });
 }
 
