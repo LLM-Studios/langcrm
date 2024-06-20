@@ -1,36 +1,20 @@
+import schema from "$modules/schema";
 import { App } from "$plugins/index";
-import prisma from "@repo/database/prisma";
 
 const route = (app: App) =>
-  app
-    .get("/data", async ({ store }) => {
-      const data = await prisma.value.findMany({
-        where: {
-          workspaceId: store.token.workspaceId,
-        },
-      });
+	app
+		.get("/data", async ({ store }) => {
+			const data = await schema.getData(store.token.workspaceId);
+			return data;
+		})
+		.get("/data/:id", async ({ params, store }) => {
+			const data = await schema.getData(store.token.workspaceId, params.id);
+			return data;
+		})
+		.delete("/data/:id", async ({ params, store }) => {
+			const data = await schema.deleteData(store.token.workspaceId, params.id);
 
-      return data;
-    })
-    .get("/data/:id", async ({ params, store }) => {
-      const data = await prisma.value.findMany({
-        where: {
-          workspaceId: store.token.workspaceId,
-          distinctId: params.id,
-        },
-      });
-
-      return data;
-    })
-    .delete("/data/:id", async ({ params, store }) => {
-      const data = await prisma.value.deleteMany({
-        where: {
-          workspaceId: store.token.workspaceId,
-          distinctId: params.id,
-        },
-      });
-
-      return data;
-    });
+			return data;
+		});
 
 export default route;
