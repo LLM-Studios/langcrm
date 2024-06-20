@@ -23,14 +23,14 @@ export default function SchemaInput({
   getSchema: () => void;
   isLoading: boolean;
 }) {
-  const [name, setName] = useState("");
+  const [id, setId] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
   const [priority, setPriority] = useState("");
   const [tags, setTags] = useState<string[]>([]);
 
   const handleSubmit = async () => {
-    if (!name || !description || !type || !priority) {
+    if (!id || !description || !type || !priority) {
       return;
     }
     const response = await fetch("/api/schema", {
@@ -38,15 +38,16 @@ export default function SchemaInput({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, description, type, priority }),
+      body: JSON.stringify({ id, description, type, priority, tags }),
     });
     if (response.ok) {
       const data = await response.json();
       setSchema([...schema, data]);
-      setName("");
+      setId("");
       setDescription("");
       setType("");
       setPriority("");
+      setTags([]);
     }
   };
 
@@ -57,8 +58,8 @@ export default function SchemaInput({
       </Button>
       <Input
         placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={id}
+        onChange={(e) => setId(e.target.value)}
       />
       <Input
         placeholder="Description"

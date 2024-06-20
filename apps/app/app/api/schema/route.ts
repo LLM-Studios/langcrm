@@ -29,26 +29,17 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const { workspace } = await getUserWorkspace();
-  const { name, description, type, priority } = await req.json();
+  const { id, description, type, priority, tags } = await req.json();
   const key = await prisma.key
-    .upsert({
-      where: {
-        id: name,
-        workspaceId: workspace!.id,
-      },
-      update: {
+    .create({
+      data: {
+        id,
         description,
         type,
         priority,
+        tags,
         workspaceId: workspace!.id,
       },
-      create: {
-        id: name,
-        description,
-        type,
-        priority,
-        workspaceId: workspace!.id,
-      },  
     })
     .catch((err: Error) => {
       console.log(err);
@@ -58,13 +49,48 @@ export async function POST(req: Request) {
         }),
         {
           status: 200,
-          statusText: "Key not upserted",
+          statusText: "Key not created",
         },
       );
     });
   return new Response(JSON.stringify(key), {
     status: 200,
-    statusText: "Key upserted",
+    statusText: "Key created",
+  });
+}
+
+export async function PATCH(req: Request) {
+  const { workspace } = await getUserWorkspace();
+  const { id, description, type, priority, tags } = await req.json();
+  const key = await prisma.key
+    .update({
+      where: {
+        id,
+        workspaceId: workspace!.id,
+      },
+      data: {
+        description,
+        type,
+        priority,
+        tags,
+        workspaceId: workspace!.id,
+      },
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return new Response(
+        JSON.stringify({
+          error: err,
+        }),
+        {
+          status: 200,
+          statusText: "Key not updated",
+        },
+      );
+    });
+  return new Response(JSON.stringify(key), {
+    status: 200,
+    statusText: "Key updated",
   });
 }
 

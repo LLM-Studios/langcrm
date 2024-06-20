@@ -38,11 +38,11 @@ export default function EditSchemaButton({
       return;
     }
     const response = await fetch("/api/schema", {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name: item.id, description, type, priority }),
+      body: JSON.stringify({ id: item.id, description, type, priority, tags }),
     });
     if (response.ok) {
       const data = await response.json();

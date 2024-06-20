@@ -14,6 +14,17 @@ import { useEffect, useState } from "react";
 import { Key as KeyType } from "@prisma/client";
 import SchemaInput from "./SchemaInput";
 import EditSchemaButton from "./EditSchemaButton";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function SchemaTable({ ...props }) {
   const [schema, setSchema] = useState<KeyType[]>([]);
@@ -98,6 +109,7 @@ function CurrentSchema({
                 <TableCell>-</TableCell>
                 <TableCell>-</TableCell>
                 <TableCell>-</TableCell>
+                <TableCell />
               </TableRow>
             ) : (
               schema.map((item, i) => {
@@ -127,12 +139,29 @@ function CurrentSchema({
                           )
                         }
                       />
-                      <Button
-                        variant={"destructive"}
-                        onClick={() => handleDelete(item.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant={"destructive"}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDelete(item.id)}
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </TableCell>
                   </TableRow>
                 );
