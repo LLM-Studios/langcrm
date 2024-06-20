@@ -1,28 +1,28 @@
 {
-  "name": "langcrm",
-  "private": true,
-  "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build",
-    "lint":  "turbo lint",
-    "prisma:deploy": "bunx prisma migrate deploy --schema=./packages/database/prisma/schema.prisma",
-    "prisma:dev": "bunx prisma migrate dev --schema=./packages/database/prisma/schema.prisma",
-    "prisma:generate": "bunx prisma generate --schema=./packages/database/prisma/schema.prisma",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\" && bunx prisma format --schema=./packages/database/prisma/schema.prisma"
-  },
-  "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
-    "@repo/database": "*",
-    "prettier": "^3.2.5",
-    "turbo": "latest"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "packageManager": "bun@1.0.33",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+	"name": "langcrm",
+	"private": true,
+	"scripts": {
+		"dev": "turbo dev",
+		"build": "turbo build",
+		"lint": "turbo lint",
+		"prisma:deploy": "bunx prisma migrate deploy --schema=./packages/database/prisma/schema.prisma",
+		"prisma:dev": "bunx prisma migrate dev --schema=./packages/database/prisma/schema.prisma",
+		"prisma:generate": "bunx prisma generate --schema=./packages/database/prisma/schema.prisma",
+		"format": "prettier --write \"**/*.{ts,tsx,md}\" && bunx prisma format --schema=./packages/database/prisma/schema.prisma"
+	},
+	"devDependencies": {
+		"@repo/eslint-config": "*",
+		"@repo/typescript-config": "*",
+		"@repo/database": "*",
+		"prettier": "^3.2.5",
+		"turbo": "latest"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"packageManager": "bun@1.0.33",
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	]
 }
