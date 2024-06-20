@@ -1,4 +1,4 @@
-import { upsertKeyVector } from "./vectors";
+import { searchSchemaKeyVectors, upsertKeyVector } from "./vectors";
 import { prisma, Prisma } from "@repo/database/prisma";
 
 const getSchema = async (workspaceId: string) => {
@@ -64,11 +64,16 @@ const getValues = async (workspaceId: string, distinctId: string) => {
 	return schemaKeys;
 };
 
-const getData = async (workspaceId: string, distinctId?: string) => {
+const getData = async (
+	workspaceId: string,
+	distinctId?: string,
+	keys?: string[]
+) => {
 	const data = await prisma.value.findMany({
 		where: {
 			workspaceId,
 			...(distinctId && { distinctId }),
+			...(keys && { keyId: { in: keys } }),
 		},
 	});
 
@@ -127,6 +132,20 @@ const deleteData = async (workspaceId: string, distinctId: string) => {
 	return data;
 };
 
+const searchKeys = async (workspaceId: string, query: string) => {
+	const keyVectors = await searchSchemaKeyVectors(query, workspaceId);
+	const keys = await prisma.key.findMany({
+		where: {
+			workspaceId,
+			id: {
+				in: keyVectors.map((keyVector) => keyVector.id as string),
+			},
+		},
+	});
+
+	return keys;
+};
+
 export default {
 	getSchema,
 	getData,
@@ -134,4 +153,5 @@ export default {
 	getValues,
 	updateValue,
 	deleteData,
+	searchKeys,
 };
