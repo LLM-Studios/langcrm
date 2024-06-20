@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["views"]
 }
 
@@ -23,59 +23,66 @@ enum Priority {
 }
 
 model Key {
-  id          String      @id
+  id          String
   description String
-  priority    Priority    @default(LOW)
+  priority    Priority   @default(LOW)
   type        String
   tags        String[]
   workspaceId String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   values      Value[]
   questions   Question[]
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  @@id([id, workspaceId])
 }
 
 model Value {
-  id        String   @id @default(uuid())
-  keyId     String
-  distinctId String
+  id          String    @id @default(uuid())
+  keyId       String
+  distinctId  String
   workspaceId String
-  value     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  key       Key      @relation(fields: [keyId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  value       String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  key         Key       @relation(fields: [keyId, workspaceId], references: [id, workspaceId], onUpdate: Cascade, onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 model Question {
-  id        String   @id
-  keyId     String
-  question  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  key       Key      @relation(fields: [keyId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  id          String    @id
+  keyId       String
+  question    String
+  workspaceId String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  key         Key       @relation(fields: [keyId, workspaceId], references: [id, workspaceId], onUpdate: Cascade, onDelete: Cascade)
 }
 
 model Workspace {
-  id          String   @id @default(uuid())
-  name        String
-  users       User[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
-  values      Value[]
-  tokens      Token[]
+  id        String     @id @default(uuid())
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
+  users     User[]
+  values    Value[]
+  tokens    Token[]
+  keys      Key[]
+  questions Question[]
 }
 
 model User {
-  id            String      @id @default(uuid())
-  authId        String
-  email         String
-  status        UserStatus  @default(ACTIVE)
-  role          Role        @default(USER)
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now()) @updatedAt
-  workspaces    Workspace[]
-  tokens        Token[]
+  id         String      @id @default(uuid())
+  authId     String
+  email      String
+  status     UserStatus  @default(ACTIVE)
+  role       Role        @default(USER)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @default(now()) @updatedAt
+  workspaces Workspace[]
+  tokens     Token[]
 }
 
 enum UserStatus {
@@ -96,12 +103,11 @@ view AuthUser {
 }
 
 model Token {
-  id String @id @default(uuid())
-  value String @unique
-  userId String
-  user User @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  id          String    @id @default(uuid())
+  value       String    @unique
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   workspaceId String
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  createdAt DateTime @default(now())
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  createdAt   DateTime  @default(now())
 }
-
