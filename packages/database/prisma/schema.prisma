@@ -102,5 +102,6 @@ model Token {
   user User @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   workspaceId String
   workspace Workspace @relation(fields: [workspaceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
 

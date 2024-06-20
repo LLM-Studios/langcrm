@@ -1,10 +1,14 @@
 import { App } from "$plugins/index";
 import prisma from "@repo/database/prisma";
 
-const anonRoutes = ["/token"];
+const anonRoutes = ["/api/token"];
 
 const auth = (app: App) =>
   app.onBeforeHandle(async ({ bearer, jwt, logger, store, path }) => {
+    const isAnonRoute = anonRoutes.some((route) => path.startsWith(route));
+    if (process.env.DOPPLER_ENVIRONMENT === "dev" && isAnonRoute) {
+      return;
+    }
     if (!bearer) {
       logger.error("No token provided");
       return Response.json(
@@ -30,7 +34,7 @@ const auth = (app: App) =>
         },
       );
     }
-    if (anonRoutes.some((route) => path.startsWith(route))) {
+    if (isAnonRoute) {
       return;
     }
     const token = await prisma.token.findUnique({
