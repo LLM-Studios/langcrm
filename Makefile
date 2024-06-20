@@ -14,4 +14,4 @@ setup:
 
 start:
 	@echo "Starting the application..."
-	doppler run -- turbo dev
+	doppler run -- turbo dev --env-mode=loose
