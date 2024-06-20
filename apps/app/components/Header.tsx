@@ -50,10 +50,7 @@ export default function Header() {
   ];
   return (
     <header className="flex h-14 lg:h-[60px] items-center px-4 gap-4 border-b">
-      <Link
-        className="flex items-center gap-2 font-semibold"
-        href="/data"
-      >
+      <Link className="flex items-center gap-2 font-semibold" href="/data">
         <DatabaseZap className="h-6 w-6" />
         <span className="hidden md:block">LangCRM</span>
       </Link>
@@ -69,7 +66,7 @@ export default function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="gap-2 p-2 rounded-lg" asChild>
                 <Card>
-                {items.map((item) => (
+                  {items.map((item) => (
                     <DropdownMenuItem className="p-2" key={item.href}>
                       <Link
                         key={item.href}
@@ -80,7 +77,7 @@ export default function Header() {
                         {item.label}
                       </Link>
                     </DropdownMenuItem>
-                ))}
+                  ))}
                 </Card>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -89,11 +86,12 @@ export default function Header() {
             {items.map((item) => {
               const isPath = pathname === item.href;
               return (
-                <Button key={item.href} variant={isPath ? "secondary" : "ghost"} asChild>
-                  <Link
-                    className={`flex items-center gap-2`}
-                    href={item.href}
-                  >
+                <Button
+                  key={item.href}
+                  variant={isPath ? "secondary" : "ghost"}
+                  asChild
+                >
+                  <Link className={`flex items-center gap-2`} href={item.href}>
                     {item.icon}
                     {item.label}
                   </Link>

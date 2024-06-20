@@ -26,6 +26,7 @@ const loggerPlugin = new Elysia()
     logger.info({
       method: request.method,
       url: request.url,
+      body: request.body,
     });
   })
   .onResponse(({ request, set, logger }) => {

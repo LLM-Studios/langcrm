@@ -1,44 +1,49 @@
 import prisma from "@repo/database/prisma";
 import { getUserWorkspace } from "@/lib/supabase/utils";
+import { Token } from "@prisma/client";
 
 export async function GET() {
   const { user, workspace } = await getUserWorkspace();
-  const token = await prisma.token
-    .findFirst({
+  const tokens = await prisma.token
+    .findMany({
       where: {
         userId: user!.id,
         workspaceId: workspace!.id,
       },
+      select: {
+        id: true,
+        value: true,
+        createdAt: true,
+      },
     })
     .catch((err: Error) => {
-      return new Response(
+      throw new Error(
         JSON.stringify({
           error: err,
         }),
-        {
-          status: 200,
-          statusText: "Token not found",
-        },
       );
     });
   return new Response(
     JSON.stringify({
-      token,
+      tokens,
     }),
     {
       status: 200,
-      statusText: "Token found",
+      statusText: "Tokens found",
     },
   );
 }
 
 export async function POST() {
   const { user, workspace } = await getUserWorkspace();
-  const response = await fetch(`${process.env.API_URL}/token/local`, {
-    headers: {
-      Authorization: `Bearer ${process.env.API_URL}`,
+  const response = await fetch(
+    `${process.env.API_URL}/token/${process.env.DOPPLER_ENVIRONMENT}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.API_KEY}`,
+      },
     },
-  }).catch((err: Error) => {
+  ).catch((err: Error) => {
     throw new Error("Error generating token", err);
   });
   const data = await response.json();

@@ -112,10 +112,21 @@ function CurrentSchema({
                       {item.type}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      {item.tags && item.tags.length ? item.tags.join(", ") : "-"}
+                      {item.tags && item.tags.length
+                        ? item.tags.join(", ")
+                        : "-"}
                     </TableCell>
                     <TableCell className="flex flex-row gap-2 justify-end">
-                      <EditSchemaButton item={item} onSuccess={(data) => setSchema(schema.map((item, index) => index === i ? data : item))}/>
+                      <EditSchemaButton
+                        item={item}
+                        onSuccess={(data) =>
+                          setSchema(
+                            schema.map((item, index) =>
+                              index === i ? data : item,
+                            ),
+                          )
+                        }
+                      />
                       <Button
                         variant={"destructive"}
                         onClick={() => handleDelete(item.id)}
@@ -133,4 +144,3 @@ function CurrentSchema({
     </div>
   );
 }
-
