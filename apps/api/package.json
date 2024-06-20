@@ -15,6 +15,7 @@
     "@elysiajs/swagger": "^1.0.5",
     "@prisma/client": "5.14.0",
     "@supabase/supabase-js": "^2.43.2",
+    "@upstash/vector": "^1.1.2",
     "elysia": "latest",
     "openai": "^4.47.1",
     "pino": "^9.1.0",
