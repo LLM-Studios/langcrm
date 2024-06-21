@@ -1,6 +1,6 @@
 import { Agent } from "$modules/agent";
 import { logger } from "$lib/logger";
-import { Priority } from "@prisma/client";
+import { KeyType, Priority } from "@prisma/client";
 import {
 	ChatCompletionMessageParam,
 	ChatCompletionTool,
@@ -37,9 +37,13 @@ const tools = [
 						type: "string",
 						description: "The key to extend the schema with.",
 					},
+					type: {
+						enum: Object.keys(KeyType),
+						description: "The type of the key value. Defaults to string.",
+					},
 					value: {
 						type: "string",
-						description: "The value to extend the schema with.",
+						description: "The value for extend the schema with.",
 					},
 					description: {
 						type: "string",
@@ -47,12 +51,12 @@ const tools = [
 							"The description of the key to extend the schema with.",
 					},
 					priority: {
-						enum: ["VERY_LOW", "LOW", "MEDIUM", "HIGH", "REQUIRED"],
+						enum: Object.keys(Priority),
 						description:
 							"The priority of the key to extend the schema with. Defaults to LOW.",
 					},
 				},
-				required: ["key", "value", "description"],
+				required: ["key", "type", "value", "description"],
 			},
 		},
 	},
@@ -84,6 +88,7 @@ const functions = {
 	extend_schema: async (
 		params: {
 			key: string;
+			type: KeyType;
 			value: string;
 			description: string;
 			priority: Priority;
@@ -91,11 +96,12 @@ const functions = {
 		metadata: { distinctId: string; workspaceId: string }
 	) => {
 		logger.debug({ msg: "Extending schema", params, metadata });
-		const { key, value, description, priority } = params;
+		const { key, type, value, description, priority } = params;
 		try {
 			await schema.upsertKey({
 				workspaceId: metadata.workspaceId,
 				id: key,
+				type,
 				description,
 				priority,
 			});
@@ -142,6 +148,7 @@ const examples = [
 					name: "extend_schema",
 					arguments: JSON.stringify({
 						key: "upcoming-travel-destination",
+						type: "TEXT",
 						value: "Berlin",
 						description: "The destination of the user's upcoming trip.",
 						priority: "MEDIUM",
@@ -200,6 +207,7 @@ const examples = [
 					name: "extend_schema",
 					arguments: JSON.stringify({
 						key: "food-preferences",
+						type: "TEXT",
 						value: "vegan",
 						description: "The user's food preferences.",
 						priority: "HIGH",
