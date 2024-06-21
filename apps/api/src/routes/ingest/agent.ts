@@ -46,17 +46,13 @@ const tools = [
 						description:
 							"The description of the key to extend the schema with.",
 					},
-					type: {
-						type: "string",
-						description: "The type of the key to extend the schema with.",
-					},
 					priority: {
 						enum: ["VERY_LOW", "LOW", "MEDIUM", "HIGH", "REQUIRED"],
 						description:
 							"The priority of the key to extend the schema with. Defaults to LOW.",
 					},
 				},
-				required: ["key", "value", "description", "type"],
+				required: ["key", "value", "description"],
 			},
 		},
 	},
@@ -90,19 +86,17 @@ const functions = {
 			key: string;
 			value: string;
 			description: string;
-			type: string;
 			priority: Priority;
 		},
 		metadata: { distinctId: string; workspaceId: string }
 	) => {
 		logger.debug({ msg: "Extending schema", params, metadata });
-		const { key, value, description, type, priority } = params;
+		const { key, value, description, priority } = params;
 		try {
 			await schema.upsertKey({
 				workspaceId: metadata.workspaceId,
 				id: key,
 				description,
-				type,
 				priority,
 			});
 
@@ -150,7 +144,6 @@ const examples = [
 						key: "upcoming-travel-destination",
 						value: "Berlin",
 						description: "The destination of the user's upcoming trip.",
-						type: "string",
 						priority: "MEDIUM",
 					}),
 				},
@@ -209,7 +202,6 @@ const examples = [
 						key: "food-preferences",
 						value: "vegan",
 						description: "The user's food preferences.",
-						type: "string",
 						priority: "HIGH",
 					}),
 				},

@@ -26,7 +26,6 @@ model Key {
   id          String
   description String
   priority    Priority   @default(LOW)
-  type        String
   tags        String[]
   workspaceId String
   createdAt   DateTime   @default(now())
@@ -75,7 +74,7 @@ model Workspace {
 
 model User {
   id         String      @id @default(uuid())
-  authId     String
+  authId     String      @unique
   email      String
   status     UserStatus  @default(ACTIVE)
   role       Role        @default(USER)

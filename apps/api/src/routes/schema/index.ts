@@ -6,16 +6,31 @@ const route = (app: App) =>
 	app
 		.get(
 			"/schema",
-			async ({ store }) => await schema.getSchema(store.token.workspaceId)
+			async ({ store, query: { q } }) => {
+				if (!q) {
+					return await schema.getSchema(store.token.workspaceId);
+				}
+
+				return await schema.searchKeys(store.token.workspaceId, q);
+			},
+			{
+				query: t.Object({
+					q: t.Optional(t.String()),
+				}),
+			}
+		)
+		.get(
+			"/schema/:key",
+			async ({ store, params: { key } }) =>
+				await schema.getKey(store.token.workspaceId, key)
 		)
 		.post(
 			"/schema",
 			async ({ body, store }) => {
-				const { name, description, type, priority, tags } = body;
+				const { name, description, priority, tags } = body;
 				return await schema.upsertKey({
 					id: name,
 					description,
-					type,
 					priority,
 					tags,
 					workspaceId: store.token.workspaceId,
@@ -25,7 +40,6 @@ const route = (app: App) =>
 				body: t.Object({
 					name: t.String(),
 					description: t.String(),
-					type: t.String(),
 					priority: t.Optional(
 						t.Enum({
 							REQUIRED: "REQUIRED",

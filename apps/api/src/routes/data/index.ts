@@ -7,12 +7,12 @@ const route = (app: App) =>
 			const data = await schema.getData(store.token.workspaceId);
 			return data;
 		})
-		.get("/data/:id", async ({ params, store }) => {
-			const data = await schema.getData(store.token.workspaceId, params.id);
+		.get("/data/:key", async ({ params, store }) => {
+			const data = await schema.getData(store.token.workspaceId, params.key);
 			return data;
 		})
-		.delete("/data/:id", async ({ params, store }) => {
-			const data = await schema.deleteData(store.token.workspaceId, params.id);
+		.delete("/data/:key", async ({ params, store }) => {
+			const data = await schema.deleteData(store.token.workspaceId, params.key);
 
 			return data;
 		});
