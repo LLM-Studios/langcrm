@@ -23,10 +23,13 @@
     "prisma": "^5.14.0"
   },
   "devDependencies": {
+    "@repo/database": "*",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
-    "@repo/database": "*",
-    "bun-types": "latest"
+    "@types/node": "^20.14.7",
+    "bun-types": "latest",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.2"
   },
   "module": "src/index.js"
 }

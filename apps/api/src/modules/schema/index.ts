@@ -18,6 +18,23 @@ const getSchema = async (workspaceId: string) => {
 	return schema;
 };
 
+const getKey = async (workspaceId: string, key: string) => {
+	const schemaKey = await prisma.key.findUnique({
+		where: {
+			id_workspaceId: {
+				id: key,
+				workspaceId,
+			},
+		},
+	});
+
+	if (!schemaKey) {
+		throw new Error("Failed to fetch schemaKey");
+	}
+
+	return schemaKey;
+};
+
 const upsertKey = async (createKeyData: Prisma.KeyCreateManyInput) => {
 	const data = await prisma.key.upsert({
 		where: {
@@ -134,6 +151,9 @@ const deleteData = async (workspaceId: string, distinctId: string) => {
 
 const searchKeys = async (workspaceId: string, query: string) => {
 	const keyVectors = await searchSchemaKeyVectors(query, workspaceId);
+	console.log("keyVectors");
+	console.log(keyVectors);
+
 	const keys = await prisma.key.findMany({
 		where: {
 			workspaceId,
@@ -149,6 +169,7 @@ const searchKeys = async (workspaceId: string, query: string) => {
 export default {
 	getSchema,
 	getData,
+	getKey,
 	upsertKey,
 	getValues,
 	updateValue,

@@ -23,8 +23,11 @@ export const generateEmbeddingVector = async (text: string) => {
 		.embeddings.create({
 			input: text,
 			model: "text-embedding-3-large",
+			dimensions: 1536,
 		})
 		.then((response) => {
+			console.log("generateEmbeddingVector", response.data);
+
 			const embedding = response.data[0];
 			if (!embedding) {
 				throw new Error("Failed to generate embedding");
@@ -34,6 +37,8 @@ export const generateEmbeddingVector = async (text: string) => {
 };
 
 export const upsertKeyVector = async (key: Key) => {
+	console.log("upsertKeyVector", key);
+
 	return await vectorIndex.upsert(
 		{
 			id: key.id,
