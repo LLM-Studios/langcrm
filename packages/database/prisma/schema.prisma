@@ -22,11 +22,19 @@ enum Priority {
   VERY_LOW
 }
 
+enum KeyType {
+  TEXT
+  NUMBER
+  BOOLEAN
+  DATETIME
+}
+
 model Key {
   id          String
   description String
   priority    Priority   @default(LOW)
   tags        String[]
+  type        KeyType    @default(TEXT)
   workspaceId String
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
