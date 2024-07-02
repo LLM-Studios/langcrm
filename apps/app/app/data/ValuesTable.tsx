@@ -1,12 +1,12 @@
 "use client";
 
 import {
-	TableHeader,
-	TableRow,
-	TableHead,
-	TableBody,
-	TableCell,
-	Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+  Table,
 } from "@/components/ui/table";
 import { Loader2, RotateCcw } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -16,26 +16,26 @@ import { Button } from "@/components/ui/button";
 type DataType = ValueType & { key: KeyType };
 
 export default function ValuesTable() {
-	const [data, setData] = useState<DataType[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState<DataType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-	useEffect(() => {
-		getData();
-	}, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
-	async function getData() {
-		setIsLoading(true);
-		const response = await fetch("api/data");
-		if (!response.ok) {
-			throw new Error("Error getting data");
-		}
-		const json = await response.json();
-		if (json.success) {
-			const data = json.data as DataType[];
-			setData(data);
-		}
-		setIsLoading(false);
-	}
+  async function getData() {
+    setIsLoading(true);
+    const response = await fetch("api/data");
+    if (!response.ok) {
+      throw new Error("Error getting data");
+    }
+    const json = await response.json();
+    if (json.success) {
+      const data = json.data as DataType[];
+      setData(data);
+    }
+    setIsLoading(false);
+  }
 
   return (
     <div className="flex flex-col items-start gap-4">

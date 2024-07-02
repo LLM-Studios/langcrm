@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import {
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
@@ -13,43 +13,43 @@ import { useState } from "react";
 import { Key as KeyType } from "@repo/database/prisma";
 
 export default function SchemaInput({
-	schema,
-	setSchema,
-	getSchema,
-	isLoading,
+  schema,
+  setSchema,
+  getSchema,
+  isLoading,
 }: {
-	schema: KeyType[];
-	setSchema: (schema: KeyType[]) => void;
-	getSchema: () => void;
-	isLoading: boolean;
+  schema: KeyType[];
+  setSchema: (schema: KeyType[]) => void;
+  getSchema: () => void;
+  isLoading: boolean;
 }) {
-	const [id, setId] = useState("");
-	const [description, setDescription] = useState("");
-	const [type, setType] = useState("");
-	const [priority, setPriority] = useState("");
-	const [tags, setTags] = useState<string[]>([]);
+  const [id, setId] = useState("");
+  const [description, setDescription] = useState("");
+  const [type, setType] = useState("");
+  const [priority, setPriority] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
 
-	const handleSubmit = async () => {
-		if (!id || !description || !type || !priority) {
-			return;
-		}
-		const response = await fetch("/api/schema", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ id, description, type, priority, tags }),
-		});
-		if (response.ok) {
-			const data = await response.json();
-			setSchema([...schema, data]);
-			setId("");
-			setDescription("");
-			setType("");
-			setPriority("");
-			setTags([]);
-		}
-	};
+  const handleSubmit = async () => {
+    if (!id || !description || !type || !priority) {
+      return;
+    }
+    const response = await fetch("/api/schema", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, description, type, priority, tags }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setSchema([...schema, data]);
+      setId("");
+      setDescription("");
+      setType("");
+      setPriority("");
+      setTags([]);
+    }
+  };
 
 	return (
 		<div className="hidden md:flex flex-row gap-2">
