@@ -1,10 +1,16 @@
-import { searchSchemaKeyVectors, upsertKeyVector } from "./vectors";
-import { prisma, Prisma } from "@repo/database/prisma";
+import { generateSearchKeyQueries } from "$modules/schema/search-key-generator";
+import {
+	deleteSchemaKeyVector,
+	searchSchemaKeyVectors,
+	upsertKeyVector,
+} from "./vectors";
+import { Key, prisma, Prisma } from "@repo/database/prisma";
 
-const getSchema = async (workspaceId: string) => {
+const getSchema = async (workspaceId: string, keys?: string[]) => {
 	const schema = await prisma.key.findMany({
 		where: {
 			workspaceId,
+			...(keys && { id: { in: keys } }),
 		},
 		orderBy: {
 			createdAt: "asc",
@@ -35,31 +41,64 @@ const getKey = async (workspaceId: string, key: string) => {
 	return schemaKey;
 };
 
-const upsertKey = async (createKeyData: Prisma.KeyCreateManyInput) => {
-	const data = await prisma.key.upsert({
+const upsertKey = async (
+	workspaceId: string,
+	keyId: string,
+	keyData: Omit<Prisma.KeyUpsertArgs["create"], "workspaceId" | "id">
+) => {
+	const key = await prisma.key.upsert({
 		where: {
 			id_workspaceId: {
-				id: createKeyData.id,
-				workspaceId: createKeyData.workspaceId,
+				id: keyId,
+				workspaceId: workspaceId,
 			},
 		},
-		update: createKeyData,
-		create: createKeyData,
+		update: keyData,
+		create: { ...keyData, workspaceId, id: keyId } as Prisma.KeyCreateInput,
 	});
 
-	if (!data) {
+	if (!key) {
 		throw new Error("Failed to upsert schema key");
 	}
 
-	upsertKeyVector(data);
+	upsertKeyVector(key);
 
-	return data;
+	return key;
 };
 
-const getValues = async (workspaceId: string, distinctId: string) => {
+const updateKey = async (
+	workspaceId: string,
+	key: string,
+	data: Prisma.KeyUpdateInput
+) => {
+	const schemaKey = await prisma.key.update({
+		where: {
+			id_workspaceId: {
+				id: key,
+				workspaceId,
+			},
+		},
+		data,
+	});
+
+	if (!schemaKey) {
+		throw new Error("Failed to update schema key");
+	}
+
+	upsertKeyVector(schemaKey);
+
+	return schemaKey;
+};
+
+const getValues = async (
+	workspaceId: string,
+	distinctId: string,
+	keys?: string[]
+) => {
 	const schemaKeys = await prisma.key.findMany({
 		where: {
 			workspaceId: workspaceId,
+			...(keys && { id: { in: keys } }),
 		},
 		include: {
 			values: {
@@ -163,6 +202,33 @@ const searchKeys = async (workspaceId: string, query: string) => {
 	return keys;
 };
 
+const searchRelevantKeys = async (workspaceId: string, input: string) => {
+	const searchKeyQueries = await generateSearchKeyQueries(input);
+
+	return Promise.all(
+		searchKeyQueries.map((k) => searchKeys(workspaceId, k))
+	).then((keys) => keys.flat());
+};
+
+const deleteKey = async (workspaceId: string, key: string) => {
+	const data = await prisma.key.delete({
+		where: {
+			id_workspaceId: {
+				id: key,
+				workspaceId,
+			},
+		},
+	});
+
+	if (!data) {
+		throw new Error("Failed to delete key");
+	}
+
+	deleteSchemaKeyVector(key, workspaceId);
+
+	return data;
+};
+
 export default {
 	getSchema,
 	getData,
@@ -172,4 +238,7 @@ export default {
 	updateValue,
 	deleteData,
 	searchKeys,
+	searchRelevantKeys,
+	deleteKey,
+	updateKey,
 };

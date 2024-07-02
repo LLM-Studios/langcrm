@@ -1,6 +1,6 @@
 import { Agent } from "$modules/agent";
 import { logger } from "$lib/logger";
-import { KeyType, Priority } from "@prisma/client";
+import { KeyType, Priority } from "@repo/database/prisma";
 import {
 	ChatCompletionMessageParam,
 	ChatCompletionTool,
@@ -55,8 +55,15 @@ const tools = [
 						description:
 							"The priority of the key to extend the schema with. Defaults to LOW.",
 					},
+					tags: {
+						type: "array",
+						items: {
+							type: "string",
+						},
+						description: "The tags of the key to extend the schema with.",
+					},
 				},
-				required: ["key", "type", "value", "description"],
+				required: ["key", "type", "value", "description", "priority", "tags"],
 			},
 		},
 	},
@@ -92,18 +99,18 @@ const functions = {
 			value: string;
 			description: string;
 			priority: Priority;
+			tags: string[];
 		},
 		metadata: { distinctId: string; workspaceId: string }
 	) => {
 		logger.debug({ msg: "Extending schema", params, metadata });
-		const { key, type, value, description, priority } = params;
+		const { key, type, value, description, priority, tags } = params;
 		try {
-			await schema.upsertKey({
-				workspaceId: metadata.workspaceId,
-				id: key,
+			await schema.upsertKey(metadata.workspaceId, key, {
 				type,
 				description,
 				priority,
+				tags,
 			});
 
 			await schema.updateValue(
@@ -152,6 +159,7 @@ const examples = [
 						value: "Berlin",
 						description: "The destination of the user's upcoming trip.",
 						priority: "MEDIUM",
+						tags: ["travel", "locations", "planning"],
 					}),
 				},
 			},
@@ -211,6 +219,7 @@ const examples = [
 						value: "vegan",
 						description: "The user's food preferences.",
 						priority: "HIGH",
+						tags: ["food", "preferences"],
 					}),
 				},
 			},
