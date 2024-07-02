@@ -6,7 +6,8 @@
     "build": "bun build src/index.ts --target bun",
     "prisma:deploy": "cd ../.. && bun run prisma:deploy && bun run prisma:generate && cd apps/api",
     "lint": "eslint . --max-warnings 0",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "test": "vitest"
   },
   "dependencies": {
     "@elysiajs/bearer": "^1.0.2",
@@ -15,12 +16,17 @@
     "@elysiajs/swagger": "^1.0.5",
     "@prisma/client": "5.14.0",
     "@supabase/supabase-js": "^2.43.2",
+    "@types/lodash": "^4.17.5",
     "@upstash/vector": "^1.1.2",
     "elysia": "latest",
+    "langchain": "^0.2.5",
+    "lodash": "^4.17.21",
     "openai": "^4.47.1",
     "pino": "^9.1.0",
     "pino-pretty": "^11.0.0",
-    "prisma": "^5.14.0"
+    "prisma": "^5.14.0",
+    "slugify": "^1.6.6",
+    "yaml": "^2.4.5"
   },
   "devDependencies": {
     "@repo/database": "*",
@@ -29,7 +35,8 @@
     "@types/node": "^20.14.7",
     "bun-types": "latest",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "vitest": "^1.6.0"
   },
   "module": "src/index.js"
 }

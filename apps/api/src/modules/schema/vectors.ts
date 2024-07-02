@@ -1,5 +1,5 @@
 import { getOpenaiClient } from "$lib/openai";
-import { Key } from "@prisma/client";
+import { Key } from "@repo/database/prisma";
 import { Index } from "@upstash/vector";
 
 const UPSTASH_VECTOR_REST_URL = process.env.UPSTASH_VECTOR_REST_URL;
@@ -26,8 +26,6 @@ export const generateEmbeddingVector = async (text: string) => {
 			dimensions: 1536,
 		})
 		.then((response) => {
-			console.log("generateEmbeddingVector", response.data);
-
 			const embedding = response.data[0];
 			if (!embedding) {
 				throw new Error("Failed to generate embedding");
@@ -37,8 +35,6 @@ export const generateEmbeddingVector = async (text: string) => {
 };
 
 export const upsertKeyVector = async (key: Key) => {
-	console.log("upsertKeyVector", key);
-
 	return await vectorIndex.upsert(
 		{
 			id: key.id,
@@ -59,17 +55,38 @@ export const upsertKeyVector = async (key: Key) => {
 export const searchSchemaKeyVectors = async (
 	query: string,
 	workspaceId: string,
-	topK: number = 10,
-	filter?: string
+	filter?: string,
+	options: {
+		topK: number;
+		minScore?: number;
+	} = {
+		topK: 10,
+		minScore: 0.7,
+	}
 ) => {
-	return await vectorIndex.query(
-		{
-			vector: await generateEmbeddingVector(query),
-			topK,
-			filter,
-		},
-		{
-			namespace: workspaceId,
-		}
-	);
+	return await vectorIndex
+		.query(
+			{
+				vector: await generateEmbeddingVector(query),
+				topK: options.topK,
+				filter,
+			},
+			{
+				namespace: workspaceId,
+			}
+		)
+		.then((response) => {
+			return response.filter(
+				(result) => !options.minScore || result.score > options.minScore
+			);
+		});
+};
+
+export const deleteSchemaKeyVector = async (
+	key: string,
+	workspaceId: string
+) => {
+	return await vectorIndex.delete(key, {
+		namespace: workspaceId,
+	});
 };
