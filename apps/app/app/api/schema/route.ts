@@ -1,79 +1,90 @@
 import { apiFetch } from "@/lib/api";
-import { getUser, getUserWorkspace } from "@/lib/supabase/utils";
-import { NextResponse } from "next/server";
+import { getUser } from "@/lib/supabase/utils";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-	const user = await getUser();
-	return apiFetch("/schema", {
-		method: "GET",
-		headers: {
-			Authorization: `Bearer ${user?.tokens[0]?.value}`,
-		},
-	}).catch((err: Error) => {
-		return NextResponse.json(
-			{ error: "Could not fetch keys" },
-			{ status: 500 }
-		);
-	});
+  const user = await getUser();
+  const token = user?.tokens[0]?.value;
+  if (!token) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: "No token provided",
+      },
+      { status: 401 },
+    );
+  }
+  return await apiFetch("/schema", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
 export async function POST(req: Request) {
-	const user = await getUser();
-	const { id, description, type, priority, tags } = await req.json();
-	console.log(
-		"body",
-		JSON.stringify({
-			id,
-			description,
-			type,
-			priority,
-			tags,
-		})
-	);
-
-	return apiFetch("/schema", {
-		method: "POST",
-		headers: {
-			Authorization: `Bearer ${user?.tokens[0]?.value}`,
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			id,
-			description,
-			type,
-			priority,
-			tags,
-		}),
-	});
+  const user = await getUser();
+  const token = user?.tokens[0]?.value;
+  if (!token) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: "No token provided",
+      },
+      { status: 401 },
+    );
+  }
+  const body = await req.json();
+  return apiFetch("/schema", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
 }
 
 export async function PATCH(req: Request) {
-	const user = await getUser();
-	const { id, description, type, priority, tags } = await req.json();
-
-	return apiFetch("/schema/" + id, {
-		method: "PATCH",
-		headers: {
-			Authorization: `Bearer ${user?.tokens[0]?.value}`,
-		},
-		body: JSON.stringify({
-			description,
-			type,
-			priority,
-			tags,
-		}),
-	});
+  const user = await getUser();
+  const token = user?.tokens[0]?.value;
+  if (!token) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: "No token provided",
+      },
+      { status: 401 },
+    );
+  }
+  const body = await req.json();
+  return apiFetch("/schema/" + body.id, {
+    method: "PATCH",
+    headers: {
+      Authorization: token,
+    },
+    body: JSON.stringify(body),
+  });
 }
 
 export async function DELETE(req: Request) {
-	const user = await getUser();
-	const { key } = await req.json();
-
-	return apiFetch("/schema/" + key, {
-		method: "DELETE",
-		headers: {
-			Authorization: `Bearer ${user?.tokens[0]?.value}`,
-			"Content-Type": "application/json",
-		},
-	});
+  const user = await getUser();
+  const token = user?.tokens[0]?.value;
+  if (!token) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: "No token provided",
+      },
+      { status: 401 },
+    );
+  }
+  const body = await req.json();
+  return apiFetch("/schema/" + body.id, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+  });
 }
