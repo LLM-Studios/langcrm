@@ -1,4 +1,3 @@
-import { generateSearchKeyQueries } from "$modules/schema/search-key-generator";
 import {
   deleteSchemaKeyVector,
   searchSchemaKeyVectors,
@@ -90,126 +89,6 @@ const updateKey = async (
   return schemaKey;
 };
 
-const getValues = async (
-  workspaceId: string,
-  distinctId: string,
-  keys?: string[],
-) => {
-  const schemaKeys = await prisma.key.findMany({
-    where: {
-      workspaceId: workspaceId,
-      ...(keys && { id: { in: keys } }),
-    },
-    include: {
-      values: {
-        where: {
-          distinctId: distinctId,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 1,
-      },
-    },
-  });
-
-  if (!schemaKeys) {
-    throw new Error("Failed to fetch schema keys");
-  }
-
-  return schemaKeys;
-};
-
-const getData = async (
-  workspaceId: string,
-  distinctId?: string,
-  keys?: string[],
-) => {
-  const data = await prisma.value.findMany({
-    where: {
-      workspaceId,
-      ...(distinctId && { distinctId }),
-      ...(keys && { keyId: { in: keys } }),
-    },
-  });
-
-  if (!data) {
-    throw new Error("Failed to fetch data");
-  }
-
-  return data;
-};
-
-const updateValue = async (
-  workspaceId: string,
-  distinctId: string,
-  key: string,
-  value: string,
-) => {
-  const data = await prisma.value.create({
-    data: {
-      key: {
-        connect: {
-          id_workspaceId: {
-            id: key,
-            workspaceId,
-          },
-        },
-      },
-      value,
-      distinctId: distinctId,
-      workspace: {
-        connect: {
-          id: workspaceId,
-        },
-      },
-    },
-  });
-
-  if (!data) {
-    throw new Error("Failed to update data");
-  }
-
-  return data;
-};
-
-const deleteData = async (workspaceId: string, distinctId: string) => {
-  const data = await prisma.value.deleteMany({
-    where: {
-      workspaceId,
-      distinctId,
-    },
-  });
-
-  if (!data) {
-    throw new Error("Failed to delete data");
-  }
-
-  return data;
-};
-
-const searchKeys = async (workspaceId: string, query: string) => {
-  const keyVectors = await searchSchemaKeyVectors(query, workspaceId);
-  const keys = await prisma.key.findMany({
-    where: {
-      workspaceId,
-      id: {
-        in: keyVectors.map((keyVector) => keyVector.id as string),
-      },
-    },
-  });
-
-  return keys;
-};
-
-const searchRelevantKeys = async (workspaceId: string, input: string) => {
-  const searchKeyQueries = await generateSearchKeyQueries(input);
-
-  return Promise.all(
-    searchKeyQueries.map((k) => searchKeys(workspaceId, k)),
-  ).then((keys) => keys.flat());
-};
-
 const deleteKey = async (workspaceId: string, key: string) => {
   const data = await prisma.key.delete({
     where: {
@@ -229,16 +108,45 @@ const deleteKey = async (workspaceId: string, key: string) => {
   return data;
 };
 
+const searchKeys = async (workspaceId: string, query: string): Promise<Key[]> => {
+  const keyVectors = await searchSchemaKeyVectors(query, workspaceId);
+
+  const keys = await prisma.key.findMany({
+    where: {
+      workspaceId,
+      id: {
+        in: keyVectors.map((keyVector) => keyVector.id as string),
+      },
+    },
+  });
+
+  return keys;
+};
+
+// const searchRelevantKeys = async (
+//   workspaceId: string,
+//   input: string,
+// ): Promise<Key[]> => {
+//   const keys = await generateKeys(input);
+
+//   const result = (
+//     await Promise.all(
+//       keys.map((key) =>
+//         searchKeys(workspaceId, `${key.key}: ${key.description}`),
+//       ),
+//     )
+//   )
+//     .flat()
+//     .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
+
+//   return result;
+// };
+
 export default {
   getSchema,
-  getData,
   getKey,
   upsertKey,
-  getValues,
-  updateValue,
-  deleteData,
-  searchKeys,
-  searchRelevantKeys,
-  deleteKey,
   updateKey,
+  deleteKey,
+  searchKeys,
 };

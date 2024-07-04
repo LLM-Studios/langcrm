@@ -1,54 +1,120 @@
-import { logger } from "$lib/logger";
-import schema from "$modules/schema";
-import { extractKeyData } from "$modules/schema/extract-key-data";
+import { prisma } from "@repo/database/prisma";
 
-const ingest = async (
+const getValues = async (
   workspaceId: string,
   distinctId: string,
-  input: string,
+  keyIds?: string[],
 ) => {
-  const keys = await schema.searchRelevantKeys(workspaceId, input);
+  const schemaKeys = await prisma.key.findMany({
+    where: {
+      workspaceId: workspaceId,
+      ...(keyIds && { id: { in: keyIds } }),
+    },
+    include: {
+      values: {
+        where: {
+          distinctId: distinctId,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 1,
+      },
+    },
+  });
 
-  const currentData = await schema.getValues(
-    workspaceId,
-    distinctId,
-    keys.map((k) => k.id),
-  );
+  if (!schemaKeys) {
+    throw new Error("Failed to fetch schema keys");
+  }
 
-  const getCurrentValue = (key: string) => {
-    const value = currentData.find((k) => k.id === key);
-    return value?.values[0]?.value;
-  };
+  return schemaKeys;
+};
 
-  const ingestedData = await Promise.all(
-    keys.map(
-      (k) =>
-        new Promise(async (resolve, reject) => {
-          const newValue = await extractKeyData(
-            input,
-            k,
-            getCurrentValue(k.id),
-          ).catch((e) => {
-            logger.error(e);
-          });
+const getData = async (
+  workspaceId: string,
+  distinctId?: string,
+  keyIds?: string[],
+) => {
+  const data = await prisma.value.findMany({
+    where: {
+      workspaceId,
+      ...(distinctId && { distinctId }),
+      ...(keyIds && { keyId: { in: keyIds } }),
+    },
+  });
 
-          if (newValue) {
-            resolve(
-              await schema.updateValue(workspaceId, distinctId, k.id, newValue),
-            );
-          }
+  if (!data) {
+    throw new Error("Failed to fetch data");
+  }
 
-          resolve({
-            key: k.id,
-            value: null,
-          });
-        }),
-    ),
-  );
+  return data;
+};
 
-  return ingestedData;
+const updateValue = async (
+  workspaceId: string,
+  distinctId: string,
+  keyId: string,
+  value: string,
+) => {
+  const data = await prisma.value.upsert({
+    where: {
+      id: keyId,
+    },
+    create: {
+      keyId,
+      workspaceId,
+      distinctId,
+      value,
+    },
+    update: {
+      key: {
+        connect: {
+          id_workspaceId: {
+            id: keyId,
+            workspaceId,
+          },
+        },
+      },
+      value,
+      distinctId: distinctId,
+      workspace: {
+        connect: {
+          id: workspaceId,
+        },
+      },
+    },
+  });
+
+  if (!data) {
+    throw new Error("Failed to update data");
+  }
+
+  return data;
+};
+
+const deleteData = async (
+  workspaceId: string,
+  distinctId: string,
+  keys?: string[],
+) => {
+  const data = await prisma.value.deleteMany({
+    where: {
+      workspaceId,
+      distinctId,
+      ...(keys && { keyId: { in: keys } }),
+    },
+  });
+
+  if (!data) {
+    throw new Error("Failed to delete data");
+  }
+
+  return data;
 };
 
 export default {
-  ingest,
+  getValues,
+  getData,
+  updateValue,
+  deleteData,
 };

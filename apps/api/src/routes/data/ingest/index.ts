@@ -1,90 +1,106 @@
-import agent from "./agent";
 import schema from "$modules/schema";
-import { generateSearchKeyQueries } from "../../../modules/schema/search-key-generator";
-import { extractKeyData } from "../../../modules/schema/extract-key-data";
-import { uniq, uniqBy } from "lodash";
-export default async (params: {
-  input: string;
-  workspaceId: string;
-  distinctId: string;
-  userId: string;
-}) => {
-  const { input, workspaceId, distinctId, userId } = params;
+import { App } from "$plugins/index";
+import { t } from "elysia";
+import { generateKey } from "$modules/schema/generate-key";
+import { extractKeys } from "$modules/schema/extract-keys";
+import { stringify } from "yaml";
+import { uniqBy } from "lodash";
+import { extractKeyValue } from "$modules/data/extract-key-value";
+import data from "$modules/data";
+import { Key } from "@repo/database/prisma";
 
-  agent.metadata = {
-    distinctId: distinctId,
-    workspaceId: workspaceId,
-    userId: userId,
-  };
+const route = (app: App) =>
+  app.post(
+    "/data/ingest",
+    async ({ body, store, logger }) => {
+      const { input, distinctId } = body;
 
-  const keys = await schema.searchRelevantKeys(workspaceId, input);
+      const workspaceId = store.token.workspaceId;
 
-  const currentContext = await schema.getValues(
-    workspaceId,
-    distinctId,
-    keys.map((k) => k.id),
-  );
+      const extractedKeys = await extractKeys(input);
 
-  const getValue = (key: string) => {
-    const value = currentContext.find((k) => k.id === key);
-    return value?.values[0]?.value;
-  };
+      logger.debug({ input, extractedKeys });
 
-  const ingestData = await Promise.all(
-    keys.map(
-      (k) =>
-        new Promise(async (resolve, reject) => {
-          const value = await extractKeyData(input, k, getValue(k.id));
-          resolve({
-            key: k.id,
-            value,
-          });
+      let newKeys: { key: string; description: string; value: any }[] = [];
+
+      const existingKeys = uniqBy((
+        await Promise.all(
+          extractedKeys.map(async (key) => {
+              const keys = await schema.searchKeys(workspaceId, key.key);
+              if (keys.length === 0) {
+                newKeys.push(key);
+              }
+              return keys;
+            },
+          ),
+        )
+          )
+            .flat(),
+          (key) => key.id,
+        );
+
+      logger.debug({ newKeys, existingKeys });
+
+      const generatedKeys = await Promise.all(
+        newKeys.map(async (key) => {
+          const generatedKey = await generateKey(stringify(key));
+          await schema.upsertKey(workspaceId, generatedKey.id, generatedKey);
+          return generatedKey;
         }),
-    ),
+      ) as Key[];
+
+      logger.debug({ generatedKeys });
+
+      const currentValues = (await data.getValues(workspaceId, distinctId, existingKeys.map((key) => key.id))).flatMap((v) => v.values);
+
+      logger.debug({ currentValues });
+
+      const [ updatedValues, newValues ] = await Promise.all([
+        Promise.all(
+          existingKeys.map(async (key) => {
+            const current = currentValues.find((v) => v.keyId === key.id);
+            const value = await extractKeyValue(input, key, current?.value);
+            logger.debug({ value, current });
+            if (value !== undefined && value !== current?.value && value !== "" && value !== "null" && value !== null) {
+              return await data.updateValue(workspaceId, distinctId, key.id, value);
+            }
+          }),
+        ),
+        Promise.all(
+          generatedKeys.map(async (key) => {
+            const value = await extractKeyValue(input, key, undefined);
+            if (value !== undefined && value !== null && value !== "null" && value !== "") {
+              return await data.updateValue(workspaceId, distinctId, key.id, value);
+            }
+          }),
+        ),
+      ]);
+
+      logger.debug({ updatedValues, newValues });
+
+      return {
+        input,
+        updatedValues: updatedValues.filter((v) => v !== undefined && v !== null),
+        newValues: newValues.filter((v) => v !== undefined && v !== null),
+      };
+    },
+    {
+      body: t.Object({
+        distinctId: t.String({
+          description: "The distinctId to relate the data to",
+        }),
+        input: t.String({
+          description: "The input data to ingest.",
+        }),
+      }),
+      detail: {
+        tags: ["data"],
+        operationId: "ingestData",
+        summary: "Ingest data",
+        description:
+          "Ingest data into the context of a distinctId. The data will be processed to extract relevant information based on the schema and your workspace configuration.",
+      },
+    },
   );
 
-  const extend = (workspaceId: string, input: string) => {
-    const searchKeys = generateSearchKeyQueries(input);
-
-    return Promise.all(
-      searchKeys.map((k) =>
-        schema.searchKeys(workspaceId, k.key + ": " + k.description),
-      ),
-    ).then((keys) => uniqBy(keys.flat(), (key) => key.id));
-  };
-
-  const additonalKeys = extend(workspaceId, input);
-
-  console.log("ingestData");
-  console.log(ingestData);
-
-  // const schemaDef =
-  // 	relevantSchema.length > 0
-  // 		? relevantSchema
-  // 				.map(
-  // 					(key) =>
-  // 						`${key.id} - ${key.description}: ${key.values
-  // 							.map((value) => value.value)
-  // 							.filter((value, index, array) => array.indexOf(value) === index)
-  // 							.join(", ")}`
-  // 				)
-  // 				.join("\n")
-  // 		: "Empty - use the 'extend_schema' tool to add a key and value.";
-
-  // const output = await agent.invoke({
-  // 	messages: [
-  // 		{
-  // 			role: "user",
-  // 			content: input,
-  // 		},
-  // 	],
-  // 	prompt_args: {
-  // 		schema: schemaDef,
-  // 	},
-  // });
-
-  return {
-    input,
-    output: ingestData,
-  };
-};
+export default route;
