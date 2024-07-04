@@ -12,6 +12,8 @@ import {
 import { Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import LinkButton from "@/components/LinkButton";
+import { User as SupabaseUser } from "@supabase/supabase-js";
+import { getUser } from "@/lib/supabase/utils";
 
 export default async function Settings() {
   const supabase = createClient();
@@ -47,6 +49,12 @@ function Main() {
             Token
           </Link>
           <Link
+            href="#profile"
+            className="font-semibold text-gray-900 dark:text-gray-50"
+          >
+            Profile
+          </Link>
+          <Link
             href="#help"
             className="font-semibold text-gray-900 dark:text-gray-50"
           >
@@ -55,12 +63,32 @@ function Main() {
         </nav>
         <div className="grid gap-6">
           <TokenSection id="token" />
+          <ProfileSection id="profile" />
           <HelpSection id="help" />
         </div>
       </div>
     </main>
   );
 }
+
+async function ProfileSection({ ...props }) {
+  const user = await getUser();
+  return (
+    <Card {...props}>
+      <CardHeader>
+        <CardTitle>Profile</CardTitle>
+        <CardDescription>View your profile</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-row items-center gap-4">
+          <h2 className="text-sm font-semibold">Email</h2>
+          <p className="font-sm text-gray-900 dark:text-gray-400">{user?.email}</p>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 
 function HelpSection({ ...props }) {
   return (
