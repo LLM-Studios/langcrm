@@ -54,7 +54,7 @@ export default function SchemaInput({
   return (
     <div className="hidden md:flex flex-row gap-2">
       <Button onClick={getSchema} variant={"outline"}>
-        <RotateCcw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
+        <RotateCcw className={`h-4 w-4`} />
       </Button>
       <Input
         placeholder="Name"
