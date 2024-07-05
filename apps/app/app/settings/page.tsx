@@ -82,13 +82,14 @@ async function ProfileSection({ ...props }) {
       <CardContent>
         <div className="flex flex-row items-center gap-4">
           <h2 className="text-sm font-semibold">Email</h2>
-          <p className="font-sm text-gray-900 dark:text-gray-400">{user?.email}</p>
+          <p className="font-sm text-gray-900 dark:text-gray-400">
+            {user?.email}
+          </p>
         </div>
       </CardContent>
     </Card>
   );
 }
-
 
 function HelpSection({ ...props }) {
   return (

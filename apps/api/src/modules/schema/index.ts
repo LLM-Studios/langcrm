@@ -108,7 +108,10 @@ const deleteKey = async (workspaceId: string, key: string) => {
   return data;
 };
 
-const searchKeys = async (workspaceId: string, query: string): Promise<Key[]> => {
+const searchKeys = async (
+  workspaceId: string,
+  query: string,
+): Promise<Key[]> => {
   const keyVectors = await searchSchemaKeyVectors(query, workspaceId);
 
   const keys = await prisma.key.findMany({

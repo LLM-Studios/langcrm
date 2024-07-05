@@ -11,23 +11,19 @@ export async function GET() {
       { status: 400 },
     );
   }
-  const tokens = await prisma.token
-    .findMany({
-      where: {
-        userId: user!.id,
-        workspaceId,
-      },
-      select: {
-        id: true,
-        value: true,
-        createdAt: true,
-      },
-    });
+  const tokens = await prisma.token.findMany({
+    where: {
+      userId: user!.id,
+      workspaceId,
+    },
+    select: {
+      id: true,
+      value: true,
+      createdAt: true,
+    },
+  });
   if (!tokens) {
-    return NextResponse.json(
-      { error: "Tokens not found" },
-      { status: 404 },
-    );
+    return NextResponse.json({ error: "Tokens not found" }, { status: 404 });
   }
   return NextResponse.json(
     {
@@ -64,19 +60,15 @@ export async function POST() {
     );
   }
   const data = await response.json();
-  const token = await prisma.token
-    .create({
-      data: {
-        value: data.token,
-        userId: user!.id,
-        workspaceId,
-      },
-    });
+  const token = await prisma.token.create({
+    data: {
+      value: data.token,
+      userId: user!.id,
+      workspaceId,
+    },
+  });
   if (!token) {
-    return NextResponse.json(
-      { error: "Token not created" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Token not created" }, { status: 500 });
   }
   return NextResponse.json(token, {
     status: 200,
@@ -92,30 +84,22 @@ export async function DELETE() {
       { status: 400 },
     );
   }
-  const token = await prisma.token
-    .findFirst({
-      where: {
-        userId: user!.id,
-        workspaceId,
-      },
-    });
+  const token = await prisma.token.findFirst({
+    where: {
+      userId: user!.id,
+      workspaceId,
+    },
+  });
   if (!token) {
-    return NextResponse.json(
-      { error: "Token not found" },
-      { status: 404 },
-    );
+    return NextResponse.json({ error: "Token not found" }, { status: 404 });
   }
-  const deletedToken = await prisma.token
-    .delete({
-      where: {
-        id: token.id,
-      },
-    });
+  const deletedToken = await prisma.token.delete({
+    where: {
+      id: token.id,
+    },
+  });
   if (!deletedToken) {
-    return NextResponse.json(
-      { error: "Token not found" },
-      { status: 404 },
-    );
+    return NextResponse.json({ error: "Token not found" }, { status: 404 });
   }
   return NextResponse.json(
     {

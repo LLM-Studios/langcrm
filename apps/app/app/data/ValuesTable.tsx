@@ -54,8 +54,12 @@ export default function ValuesTable() {
                 <TableHead className="max-w-[150px]">key</TableHead>
                 <TableHead className="max-w-[150px]">value</TableHead>
                 <TableHead className="max-w-[150px]">description</TableHead>
-                <TableHead className="hidden md:table-cell">distinctId</TableHead>
-                <TableHead className="hidden md:table-cell">createdAt</TableHead>
+                <TableHead className="hidden md:table-cell">
+                  distinctId
+                </TableHead>
+                <TableHead className="hidden md:table-cell">
+                  createdAt
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

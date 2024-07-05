@@ -20,7 +20,7 @@ Schema:
     },
     "priority": {
         "type": "string",
-        "enum": ["REQUIRED", "HIGH", "MEDIUM", "LOW", "VERY_LOW"],
+        "enum": ["REQUIRED", "HIGH", "MEDIUM", "LOW"],
         "description": "Priority level of the key."
     },
     "tags": {
@@ -50,7 +50,8 @@ Follow these guidelines when generating keys:
 const examples = [
   {
     role: "user",
-    content: "- name: personal.language\n- description: Language of the user\n- value: German",
+    content:
+      "- name: personal.language\n- description: Language of the user\n- value: German",
   },
   {
     role: "assistant",
@@ -64,7 +65,8 @@ const examples = [
   },
   {
     role: "user",
-    content: "- name: personal.age\n- description: Age of the user\n- value: 30",
+    content:
+      "- name: personal.age\n- description: Age of the user\n- value: 30",
   },
   {
     role: "assistant",
@@ -78,7 +80,8 @@ const examples = [
   },
   {
     role: "user",
-    content: "- name: contact.email\n- description: Email address of the user\n- value: user@example.com",
+    content:
+      "- name: contact.email\n- description: Email address of the user\n- value: user@example.com",
   },
   {
     role: "assistant",
@@ -92,7 +95,8 @@ const examples = [
   },
   {
     role: "user",
-    content: "- name: personal.age\n- description: Age of the user\n- value: 30",
+    content:
+      "- name: personal.age\n- description: Age of the user\n- value: 30",
   },
   {
     role: "assistant",
@@ -106,7 +110,8 @@ const examples = [
   },
   {
     role: "user",
-    content: "- name: preferences.newsletter\n- description: User's preference for receiving newsletters\n- value: true",
+    content:
+      "- name: preferences.newsletter\n- description: User's preference for receiving newsletters\n- value: true",
   },
   {
     role: "assistant",
@@ -139,7 +144,10 @@ export const generateKey = async (input: string) => {
     throw new Error("No response from agent");
   }
 
-  const result = JSON.parse(response) as Omit<Key, "workspaceId" | "createdAt" | "updatedAt">;
+  const result = JSON.parse(response) as Omit<
+    Key,
+    "workspaceId" | "createdAt" | "updatedAt"
+  >;
 
   return result;
 };

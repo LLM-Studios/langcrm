@@ -51,74 +51,71 @@ export default function SchemaInput({
     }
   };
 
-	return (
-		<div className="hidden md:flex flex-row gap-2">
-			<Button onClick={getSchema} variant={"outline"}>
-				<RotateCcw className={`h-4 w-4`} />
-			</Button>
-			<Input
-				placeholder="Name"
-				value={id}
-				onChange={(e) => setId(e.target.value)}
-			/>
-			<Input
-				placeholder="Description"
-				value={description}
-				onChange={(e) => setDescription(e.target.value)}
-			/>
-			<Input
-				placeholder="Tags"
-				value={tags.join(",")}
-				onChange={(e) => setTags(e.target.value.split(","))}
-			/>
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button variant={"secondary"} className="flex flex-row gap-2">
-						<ChevronDown className="h-4 w-4" />
-						{priority || "Priority"}
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent>
-					<DropdownMenuItem onSelect={() => setPriority("REQUIRED")}>
-						REQUIRED
-					</DropdownMenuItem>
-					<DropdownMenuItem onSelect={() => setPriority("HIGH")}>
-						HIGH
-					</DropdownMenuItem>
-					<DropdownMenuItem onSelect={() => setPriority("MEDIUM")}>
-						MEDIUM
-					</DropdownMenuItem>
-					<DropdownMenuItem onSelect={() => setPriority("LOW")}>
-						LOW
-					</DropdownMenuItem>
-					<DropdownMenuItem onSelect={() => setPriority("VERY_LOW")}>
-						VERY LOW
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button variant={"secondary"} className="flex flex-row gap-2">
-						<ChevronDown className="h-4 w-4" />
-						{type || "Type"}
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent>
-					<DropdownMenuItem onSelect={() => setType("TEXT")}>
-						Text
-					</DropdownMenuItem>
-					<DropdownMenuItem onSelect={() => setType("NUMBER")}>
-						Number
-					</DropdownMenuItem>
-					<DropdownMenuItem onSelect={() => setType("BOOLEAN")}>
-						Boolean
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
-			<Button className="flex flex-row gap-2" onClick={handleSubmit}>
-				<Plus className="h-4 w-4" />
-				Add Field
-			</Button>
-		</div>
-	);
+  return (
+    <div className="hidden md:flex flex-row gap-2">
+      <Button onClick={getSchema} variant={"outline"}>
+        <RotateCcw className={`h-4 w-4`} />
+      </Button>
+      <Input
+        placeholder="Name"
+        value={id}
+        onChange={(e) => setId(e.target.value)}
+      />
+      <Input
+        placeholder="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      <Input
+        placeholder="Tags"
+        value={tags.join(",")}
+        onChange={(e) => setTags(e.target.value.split(","))}
+      />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"secondary"} className="flex flex-row gap-2">
+            <ChevronDown className="h-4 w-4" />
+            {priority || "Priority"}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem onSelect={() => setPriority("REQUIRED")}>
+            REQUIRED
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setPriority("HIGH")}>
+            HIGH
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setPriority("MEDIUM")}>
+            MEDIUM
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setPriority("LOW")}>
+            LOW
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"secondary"} className="flex flex-row gap-2">
+            <ChevronDown className="h-4 w-4" />
+            {type || "Type"}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem onSelect={() => setType("TEXT")}>
+            TEXT
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setType("NUMBER")}>
+            NUMBER
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setType("BOOLEAN")}>
+            BOOLEAN
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <Button className="flex flex-row gap-2" onClick={handleSubmit}>
+        <Plus className="h-4 w-4" />
+        Add Field
+      </Button>
+    </div>
+  );
 }

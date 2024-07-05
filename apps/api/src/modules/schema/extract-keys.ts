@@ -52,56 +52,56 @@ const examples = [
   {
     role: "assistant",
     content: JSON.stringify({
-      "keys": [
+      keys: [
         {
           key: "activities.recent",
           description: "Indicates recent participation in skydiving activity",
-          value: "skydiving"
+          value: "skydiving",
         },
         {
           key: "travel.recent.destination",
           description: "Records the most recent travel destination",
-          value: "New Zealand"
+          value: "New Zealand",
         },
         {
           key: "travel.preferences",
           description: "Indicates preference for adventure travel",
-          value: "adventure"
+          value: "adventure",
         },
         {
           key: "personality.traits",
           description: "Suggests an adventurous personality trait",
-          value: "adventurous"
+          value: "adventurous",
         },
         {
           key: "social.interaction",
           description: "Indicates positive social interactions during travel",
-          value: "travel"
+          value: "travel",
         },
         {
           key: "experience.rating",
           description: "Captures the rating of a recent experience",
-          value: "recent"
+          value: "recent",
         },
         {
           key: "interests",
           description: "Indicates interest in outdoor activities",
-          value: "outdoor_activities"
+          value: "outdoor_activities",
         },
         {
           key: "shopping.intent",
           description: "Shows current shopping intent for outdoor gear",
-          value: "outdoor_gear"
+          value: "outdoor_gear",
         },
         {
           key: "preferences",
           description: "Indicates preference for high-quality products",
-          value: "high-quality"
+          value: "high-quality",
         },
         {
           key: "lifestyle",
           description: "Suggests an active lifestyle",
-          value: "active"
+          value: "active",
         },
       ],
     }),
@@ -113,18 +113,18 @@ const examples = [
   {
     role: "assistant",
     content: JSON.stringify({
-      "keys": [
+      keys: [
         {
           key: "communication.style",
           description:
             "Suggests the user is using an informal communication style",
-          value: "informal"
+          value: "informal",
         },
         {
           key: "social.interaction",
           description:
             "Indicates the user is engaging in polite social interaction by asking about wellbeing",
-          value: "polite"
+          value: "polite",
         },
       ],
     }),
@@ -136,42 +136,42 @@ const examples = [
   {
     role: "assistant",
     content: JSON.stringify({
-      "keys": [
+      keys: [
         {
           key: "property.ownership",
           description: "Suggests the user owns a castle or small palace",
-          value: "castle"
+          value: "castle",
         },
         {
           key: "property.ownership.location",
           description: "The user owns a property located in Paris",
-          value: "paris"
+          value: "paris",
         },
         {
           key: "socioeconomic.status",
           description: "Indicators for a high socioeconomic status or wealth",
-          value: "wealthy"
+          value: "wealthy",
         },
         {
           key: "cultural.connection",
           description: "Suggests a connection to French culture or real estate",
-          value: "france"
+          value: "france",
         },
         {
           key: "language.skills",
           description:
             "The user might be multilingual, speaking different languages",
-          value: "multilingual"
+          value: "multilingual",
         },
         {
           key: "lifestyle.luxury",
           description: "Indicators of a luxurious lifestyle",
-          value: true
+          value: true,
         },
         {
           key: "lifestyle.active",
           description: "Suggests an active lifestyle",
-          value: true
+          value: true,
         },
       ],
     }),
@@ -198,7 +198,7 @@ export const extractKeys = async (input: string) => {
   }
 
   const result = JSON.parse(response) as {
-    "keys": [{ key: string; description: string, value: any }];
+    keys: [{ key: string; description: string; value: any }];
   };
 
   return result["keys"];

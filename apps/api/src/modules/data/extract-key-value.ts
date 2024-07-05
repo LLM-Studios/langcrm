@@ -58,7 +58,8 @@ const examples = [
       "TEXT",
       undefined,
       "I recently returned from a mission on the lunar base where I completed a thrilling spacewalk. It was an amazing experience to float in space and repair the satellite.",
-    )},
+    ),
+  },
   {
     role: "assistant",
     content: JSON.stringify({
@@ -75,7 +76,8 @@ const examples = [
       "TEXT",
       undefined,
       "In my free time, I enjoy painting landscapes and playing the guitar. It helps me relax and express my creativity.",
-    )},
+    ),
+  },
   {
     role: "assistant",
     content: JSON.stringify({
@@ -92,7 +94,8 @@ const examples = [
       "TEXT",
       undefined,
       "I love Italian cuisine, especially pasta and pizza. I also enjoy trying out new vegetarian recipes.",
-    )},
+    ),
+  },
   {
     role: "assistant",
     content: JSON.stringify({
@@ -109,12 +112,14 @@ const examples = [
       "TEXT",
       undefined,
       "I work in a fast-paced tech startup where collaboration and innovation are key. We use agile methodologies to manage our projects.",
-    )},
+    ),
+  },
   {
     role: "assistant",
     content: JSON.stringify({
       key: "environment.work",
-      value: "fast-paced tech startup, collaboration, innovation, agile methodologies",
+      value:
+        "fast-paced tech startup, collaboration, innovation, agile methodologies",
       type: "TEXT",
     }),
   },
@@ -126,7 +131,8 @@ const examples = [
       "TEXT",
       undefined,
       "I am fluent in English and Spanish, and I am currently learning French.",
-    )},
+    ),
+  },
   {
     role: "assistant",
     content: JSON.stringify({
@@ -150,19 +156,28 @@ export const extractKeyValue = async (params: {
 }) => {
   const { input, key, currentValue, relevantData } = params;
 
-  const schema = relevantData?.map((k) => `${k.id}: ${k.description}: ${k.values[0]?.value ?? ''}`).join("\n")
+  const schema = relevantData
+    ?.map((k) => `${k.id}: ${k.description}: ${k.values[0]?.value ?? ""}`)
+    .join("\n");
 
   const response = await agent.invoke({
     messages: [
       {
         role: "user",
-        content: formatMessage(key.id, key.description, key.type, currentValue, input),
+        content: formatMessage(
+          key.id,
+          key.description,
+          key.type,
+          currentValue,
+          input,
+        ),
       },
     ],
     prompt_args: {
-      ...(relevantData && relevantData.length > 0 && {
-        schema,
-      }),
+      ...(relevantData &&
+        relevantData.length > 0 && {
+          schema,
+        }),
     },
   });
 
@@ -172,5 +187,5 @@ export const extractKeyValue = async (params: {
 
   const json = JSON.parse(response);
 
-  return json.value;
+  return json.value.toString();
 };

@@ -62,9 +62,8 @@ export default function EditSchemaButton({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            Edit <b>{item.id}</b>
-          </AlertDialogTitle>
+          <AlertDialogTitle>Edit</AlertDialogTitle>
+          <AlertDialogDescription>{item.id}</AlertDialogDescription>
         </AlertDialogHeader>
         <div className="flex flex-col gap-2">
           <Input
@@ -74,8 +73,10 @@ export default function EditSchemaButton({
           />
           <Input
             placeholder="Tags"
-            value={tags?.join(",")}
-            onChange={(e) => setTags(e.target.value.split(","))}
+            value={tags?.join(", ")}
+            onChange={(e) =>
+              setTags(e.target.value.split(",").map((tag) => tag.trim()))
+            }
           />
           <div className="flex flex-row gap-2">
             <DropdownMenu>
@@ -98,9 +99,6 @@ export default function EditSchemaButton({
                 <DropdownMenuItem onSelect={() => setPriority("LOW")}>
                   LOW
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setPriority("VERY_LOW")}>
-                  VERY LOW
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <DropdownMenu>
@@ -112,13 +110,13 @@ export default function EditSchemaButton({
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem onSelect={() => setType("TEXT")}>
-                  Text
+                  TEXT
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => setType("NUMBER")}>
-                  Number
+                  NUMBER
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => setType("BOOLEAN")}>
-                  Boolean
+                  BOOLEAN
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

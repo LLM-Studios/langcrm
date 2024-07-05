@@ -11,19 +11,18 @@ export async function GET() {
       { status: 400 },
     );
   }
-  const data = await prisma.value
-    .findMany({
-      where: {
-        workspaceId: workspaceId,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      distinct: "keyId",
-      include: {
-        key: true,
-      },
-    });
+  const data = await prisma.value.findMany({
+    where: {
+      workspaceId: workspaceId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    distinct: "keyId",
+    include: {
+      key: true,
+    },
+  });
   if (!data) {
     return NextResponse.json(
       {

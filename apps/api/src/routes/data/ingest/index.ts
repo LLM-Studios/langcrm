@@ -15,90 +15,126 @@ const route = (app: App) =>
     async ({ body, store, logger }) => {
       const { input, distinctId } = body;
 
-      const workspaceId = store.token.workspaceId;
+      try {
+        const workspaceId = store.token.workspaceId;
 
-      const extractedKeys = await extractKeys(input);
+        const extractedKeys = await extractKeys(input);
 
-      logger.debug({ input, extractedKeys });
+        logger.debug({ input, extractedKeys });
 
-      let newKeys: { key: string; description: string; value: any }[] = [];
+        let newKeys: { key: string; description: string; value: any }[] = [];
 
-      const existingKeys = uniqBy((
-        await Promise.all(
-          extractedKeys.map(async (key) => {
-              const keys = await schema.searchKeys(workspaceId, key.key);
-              if (keys.length === 0) {
-                newKeys.push(key);
-              }
-              return keys;
-            },
-          ),
-        )
-          )
-            .flat(),
+        const existingKeys = uniqBy(
+          (
+            await Promise.all(
+              extractedKeys.map(async (key) => {
+                const keys = await schema.searchKeys(workspaceId, key.key);
+                if (keys.length === 0) {
+                  newKeys.push(key);
+                }
+                return keys;
+              }),
+            )
+          ).flat(),
           (key) => key.id,
         );
 
-      logger.debug({ newKeys, existingKeys });
+        logger.debug({ newKeys, existingKeys });
 
-      const generatedKeys = await Promise.all(
-        newKeys.map(async (key) => {
-          const generatedKey = await generateKey(stringify(key));
-          await schema.upsertKey(workspaceId, generatedKey.id, generatedKey);
-          return generatedKey;
-        }),
-      ) as Key[];
-
-      logger.debug({ generatedKeys });
-
-      const currentValues = (await data.getValues(workspaceId, distinctId, existingKeys.map((key) => key.id))).flatMap((v) => v.values);
-
-      logger.debug({ currentValues });
-
-      const [ updatedValues, newValues ] = await Promise.all([
-        Promise.all(
-          existingKeys.map(async (key) => {
-            const currentValue = currentValues.find((v) => v.keyId === key.id)?.value;
-            const relevantKeys = await schema.searchKeys(workspaceId, key.id);
-            const relevantData = await data.getValues(workspaceId, distinctId, relevantKeys.map((k) => k.id));
-            const value = await extractKeyValue({
-              input,
-              key,
-              currentValue,
-              relevantData,
-            });
-            // QA step
-            logger.debug({ input, value, currentValue, key, relevantData });
-            if (value && value !== currentValue) {
-              return await data.updateValue(workspaceId, distinctId, key.id, value);
-            }
+        const generatedKeys = (await Promise.all(
+          newKeys.map(async (key) => {
+            const generatedKey = await generateKey(stringify(key));
+            await schema.upsertKey(workspaceId, generatedKey.id, generatedKey);
+            return generatedKey;
           }),
-        ),
-        Promise.all(
-          generatedKeys.map(async (key) => {
-            const relevantKeys = await schema.searchKeys(workspaceId, key.id);
-            const relevantData = await data.getValues(workspaceId, distinctId, relevantKeys.map((k) => k.id));
-            const value = await extractKeyValue({
-              input,
-              key,
-              relevantData,
-            });
-            // QA step
-            logger.debug({ input, value, key, relevantData });
-            if (value) {
-              return await data.updateValue(workspaceId, distinctId, key.id, value);
-            }
-          }),
-        ),
-      ]);
+        )) as Key[];
 
-      logger.debug({ updatedValues, newValues });
+        logger.debug({ generatedKeys });
 
-      return {
-        input,
-        updatedValues: updatedValues.filter((v) => v !== undefined && v !== null),
-        newValues: newValues.filter((v) => v !== undefined && v !== null),
-      };
+        const currentValues = (
+          await data.getValues(
+            workspaceId,
+            distinctId,
+            existingKeys.map((key) => key.id),
+          )
+        ).flatMap((v) => v.values);
+
+        logger.debug({ currentValues });
+
+        const [updatedValues, newValues] = await Promise.all([
+          Promise.all(
+            existingKeys.map(async (key) => {
+              const currentValue = currentValues.find(
+                (v) => v.keyId === key.id,
+              )?.value;
+              const relevantKeys = await schema.searchKeys(workspaceId, key.id);
+              const relevantData = await data.getValues(
+                workspaceId,
+                distinctId,
+                relevantKeys.map((k) => k.id),
+              );
+              const value = await extractKeyValue({
+                input,
+                key,
+                currentValue,
+                relevantData,
+              });
+              // QA step
+              logger.debug({ input, value, currentValue, key, relevantData });
+              if (value && value !== currentValue) {
+                return await data.updateValue(
+                  workspaceId,
+                  distinctId,
+                  key.id,
+                  value,
+                );
+              }
+            }),
+          ),
+          Promise.all(
+            generatedKeys.map(async (key) => {
+              const relevantKeys = await schema.searchKeys(workspaceId, key.id);
+              const relevantData = await data.getValues(
+                workspaceId,
+                distinctId,
+                relevantKeys.map((k) => k.id),
+              );
+              const value = await extractKeyValue({
+                input,
+                key,
+                relevantData,
+              });
+              // QA step
+              logger.debug({ input, value, key, relevantData });
+              if (value) {
+                return await data.updateValue(
+                  workspaceId,
+                  distinctId,
+                  key.id,
+                  value,
+                );
+              }
+            }),
+          ),
+        ]);
+
+        logger.debug({ updatedValues, newValues });
+
+        return {
+          input,
+          updatedValues: updatedValues.filter(
+            (v) => v !== undefined && v !== null,
+          ),
+          newValues: newValues.filter((v) => v !== undefined && v !== null),
+        };
+      } catch (error: any) {
+        logger.error({ error });
+        return {
+          input,
+          statusCode: 500,
+          error: error.message,
+        };
+      }
     },
     {
       body: t.Object({

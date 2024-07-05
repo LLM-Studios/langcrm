@@ -19,14 +19,12 @@ enum Priority {
   HIGH
   MEDIUM
   LOW
-  VERY_LOW
 }
 
 enum KeyType {
   TEXT
   NUMBER
   BOOLEAN
-  DATETIME
 }
 
 model Key {
