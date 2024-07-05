@@ -32,7 +32,7 @@ Schema:
     },
     "type": {
         "type": "string",
-        "enum": ["TEXT", "NUMBER", "BOOLEAN", "DATETIME"],
+        "enum": ["TEXT", "NUMBER", "BOOLEAN"],
         "description": "Type of the key."
     }
   },

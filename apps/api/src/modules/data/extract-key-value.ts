@@ -1,94 +1,139 @@
 import { Agent } from "$modules/agent";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import { Key } from "@repo/database/prisma";
+import { logger } from "$lib/logger";
+import { Key, Value } from "@prisma/client";
 
-const system_prompt = () =>
-  `You are a senior data analyst at a company offering a platform for users to store and organize their contextual data on a semantic index. Your task is to extract concise summaries of the specified context data from the provided Current Input.
+const system_prompt = (args: Record<string, string>) =>
+  `Your task is to extract information from the user input. You will be given a key and a description of the information to extract along with the current value of the key and its type.
 
-CONSTITUTION:
-1.	Identify Relevant Information: Focus solely on the information that corresponds to the given Schema Key within the given Input.
-2.	Extract and Summarize: Extract meaningful summaries of all information that relates to the given Schema Key. Ensure that the summaries are concise and accurate.
-3.	Return null if No information can be found: If the Input does not contain any information related to the Schema Key, return "null".`;
+Your output object should follow the following format:
+
+Schema:
+{
+  "type": "object",
+  "properties": {
+    "key": {
+        "type": "string",
+        "description": "The key of the information to extract."
+    },
+    "value": {
+        "type": "any",
+        "description": "The value of the key."
+    },
+    "type": {
+        "type": "string",
+        "enum": ["TEXT", "NUMBER", "BOOLEAN"],
+        "description": "Type of the key."
+    }
+  },
+  "required": ["key", "value"]
+}
+
+${args.schema ? `This information might be useful to inform your extraction process: ${args.schema}` : ""}
+
+Follow these guidelines when extracting the value:
+1. If the information is not found, return "null" as the value. In this case the type can be omitted.
+3. If the current value is defined, your output is used to update the value. Only respond with a value if the input indicates that the value has changed.`;
 
 const formatMessage = (
   key: string,
   description: string,
+  type: string,
   currentValue: any | undefined,
   input: string,
 ) =>
-  `Schema Key: ${key}
-Schema Key Description: ${description}
-Last Value: ${currentValue ?? "undefined <- find this in the input"}
+  `Extract the following information: ${key} - ${description}.
+The current value is: ${currentValue}
+The type of the value is: ${type}
 
-Extract the "${key}" information from the following input: "${input}"`;
+From this input: 
+${input}`;
 
 const examples = [
   {
     role: "user",
     content: formatMessage(
-      "activities.recent.spacewalk",
-      "Indicates recent participation in a spacewalk activity",
+      "activities.recent",
+      "Recent user activity",
+      "TEXT",
       undefined,
       "I recently returned from a mission on the lunar base where I completed a thrilling spacewalk. It was an amazing experience to float in space and repair the satellite.",
-    ),
-  },
+    )},
   {
     role: "assistant",
-    content:
-      "activities.recent.spacewalk: Completed a spacewalk on a mission to the lunar base, repaired the satellite",
+    content: JSON.stringify({
+      key: "activities.recent",
+      value: "spacewalk, satellite repair",
+      type: "TEXT",
+    }),
   },
   {
     role: "user",
     content: formatMessage(
-      "lifestyle.luxury",
-      "Indicators of a luxurious lifestyle, such as expensive purchases or extravagant vacations",
+      "personal.hobbies",
+      "User's hobbies",
+      "TEXT",
       undefined,
-      "I went camping last weekend, I loved it.",
-    ),
-  },
+      "In my free time, I enjoy painting landscapes and playing the guitar. It helps me relax and express my creativity.",
+    )},
   {
     role: "assistant",
-    content: "lifestyle.luxury: null",
+    content: JSON.stringify({
+      key: "personal.hobbies",
+      value: "painting landscapes, playing the guitar",
+      type: "TEXT",
+    }),
   },
   {
     role: "user",
     content: formatMessage(
-      "personal.species",
-      "Indicates the species of the user in a sci-fi setting",
+      "preferences.food",
+      "User's food preferences",
+      "TEXT",
       undefined,
-      "As a Xylian from the planet Zylox, I have the ability to communicate telepathically with my fellow beings. Our advanced technology allows us to travel between galaxies with ease.",
-    ),
-  },
+      "I love Italian cuisine, especially pasta and pizza. I also enjoy trying out new vegetarian recipes.",
+    )},
   {
     role: "assistant",
-    content: "personal.species: Xylian from the planet Zylox",
+    content: JSON.stringify({
+      key: "preferences.food",
+      value: "Italian cuisine, pasta, pizza, vegetarian recipes",
+      type: "TEXT",
+    }),
   },
   {
     role: "user",
     content: formatMessage(
-      "activities.recent.spacewalk",
-      "Indicates recent participation in a spacewalk activity",
+      "environment.work",
+      "User's work environment",
+      "TEXT",
       undefined,
-      "No, I haven't been skydiving recently. I've been busy with work and haven't had time for any activities outside of the office.",
-    ),
-  },
+      "I work in a fast-paced tech startup where collaboration and innovation are key. We use agile methodologies to manage our projects.",
+    )},
   {
     role: "assistant",
-    content: "activities.recent.spacewalk: null",
+    content: JSON.stringify({
+      key: "environment.work",
+      value: "fast-paced tech startup, collaboration, innovation, agile methodologies",
+      type: "TEXT",
+    }),
   },
   {
     role: "user",
     content: formatMessage(
-      "activities.recent.time_travel",
-      "Indicates recent participation in time travel activities",
-      "Mid-20th century",
-      "Yesterday, I went on an incredible journey to the Jurassic period. It was exhilarating to see dinosaurs in their natural habitat and study their behavior up close.",
-    ),
-  },
+      "personal.language",
+      "User's language",
+      "TEXT",
+      undefined,
+      "I am fluent in English and Spanish, and I am currently learning French.",
+    )},
   {
     role: "assistant",
-    content:
-      "activities.recent.time_travel: Traveled to the Jurassic period to study dinosaurs",
+    content: JSON.stringify({
+      key: "personal.language",
+      value: "English, Spanish, learning French",
+      type: "TEXT",
+    }),
   },
 ] as ChatCompletionMessageParam[];
 
@@ -97,21 +142,35 @@ const agent = new Agent({
   examples,
 });
 
-export const extractKeyValue = async (input: string, key: Key, value: any) => {
+export const extractKeyValue = async (params: {
+  input: string;
+  key: Key;
+  currentValue?: any;
+  relevantData?: ({ values: Value[] } & Key)[];
+}) => {
+  const { input, key, currentValue, relevantData } = params;
+
+  const schema = relevantData?.map((k) => `${k.id}: ${k.description}: ${k.values[0]?.value ?? ''}`).join("\n")
+
   const response = await agent.invoke({
     messages: [
       {
         role: "user",
-        content: formatMessage(key.id, key.description, value, input),
+        content: formatMessage(key.id, key.description, key.type, currentValue, input),
       },
     ],
+    prompt_args: {
+      ...(relevantData && relevantData.length > 0 && {
+        schema,
+      }),
+    },
   });
 
-  if (!response || response === "null") {
+  if (!response) {
     return null;
   }
 
-  const result = response.split(key.id + ": ")[1];
+  const json = JSON.parse(response);
 
-  return result;
+  return json.value;
 };

@@ -58,18 +58,34 @@ const route = (app: App) =>
       const [ updatedValues, newValues ] = await Promise.all([
         Promise.all(
           existingKeys.map(async (key) => {
-            const current = currentValues.find((v) => v.keyId === key.id);
-            const value = await extractKeyValue(input, key, current?.value);
-            logger.debug({ value, current });
-            if (value !== undefined && value !== current?.value && value !== "" && value !== "null" && value !== null) {
+            const currentValue = currentValues.find((v) => v.keyId === key.id)?.value;
+            const relevantKeys = await schema.searchKeys(workspaceId, key.id);
+            const relevantData = await data.getValues(workspaceId, distinctId, relevantKeys.map((k) => k.id));
+            const value = await extractKeyValue({
+              input,
+              key,
+              currentValue,
+              relevantData,
+            });
+            // QA step
+            logger.debug({ input, value, currentValue, key, relevantData });
+            if (value && value !== currentValue) {
               return await data.updateValue(workspaceId, distinctId, key.id, value);
             }
           }),
         ),
         Promise.all(
           generatedKeys.map(async (key) => {
-            const value = await extractKeyValue(input, key, undefined);
-            if (value !== undefined && value !== null && value !== "null" && value !== "") {
+            const relevantKeys = await schema.searchKeys(workspaceId, key.id);
+            const relevantData = await data.getValues(workspaceId, distinctId, relevantKeys.map((k) => k.id));
+            const value = await extractKeyValue({
+              input,
+              key,
+              relevantData,
+            });
+            // QA step
+            logger.debug({ input, value, key, relevantData });
+            if (value) {
               return await data.updateValue(workspaceId, distinctId, key.id, value);
             }
           }),
