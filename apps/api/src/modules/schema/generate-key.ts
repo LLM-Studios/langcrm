@@ -125,7 +125,7 @@ const examples = [
   },
 ] as ChatCompletionMessageParam[];
 
-const agent = new Agent({
+export const agent = new Agent({
   system_prompt,
   examples,
 });

@@ -16,10 +16,10 @@ import { observeOpenAI } from "langfuse";
  */
 export class Agent {
   private model: string;
-  private system_prompt: (args: Record<string, string>) => string;
+  public system_prompt: (args: Record<string, string>) => string;
   private tools?: OpenAI.Chat.Completions.ChatCompletionTool[];
   private functions?: Record<string, (..._args: any[]) => Promise<string>>;
-  private examples: OpenAI.Chat.Completions.ChatCompletionMessageParam[];
+  public examples: OpenAI.Chat.Completions.ChatCompletionMessageParam[];
   public metadata?: Record<string, any>;
 
   constructor(params: {

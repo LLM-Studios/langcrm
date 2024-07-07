@@ -7,7 +7,7 @@
     "prisma:deploy": "cd ../.. && bun run prisma:deploy && bun run prisma:generate && cd apps/api",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "test": "vitest"
+    "test": "bun run src/modules/test/index.ts"
   },
   "dependencies": {
     "@elysiajs/bearer": "^1.0.2",
@@ -24,6 +24,7 @@
     "pino": "^9.1.0",
     "pino-pretty": "^11.0.0",
     "prisma": "^5.14.0",
+    "promptfoo": "^0.69.0",
     "slugify": "^1.6.6",
     "yaml": "^2.4.5"
   },

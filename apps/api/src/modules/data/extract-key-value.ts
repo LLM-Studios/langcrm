@@ -1,9 +1,8 @@
 import { Agent } from "$modules/agent";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import { logger } from "$lib/logger";
 import { Key, Value } from "@prisma/client";
 
-const system_prompt = (args: Record<string, string>) =>
+const system_prompt = (args: Record<string, any>) =>
   `Your task is to extract information from the user input. You will be given a key and a description of the information to extract along with the current value of the key and its type.
 
 Your output object should follow the following format:
@@ -35,7 +34,7 @@ Follow these guidelines when extracting the value:
 1. If the information is not found, return "null" as the value. In this case the type can be omitted.
 3. If the current value is defined, your output is used to update the value. Only respond with a value if the input indicates that the value has changed.`;
 
-const formatMessage = (
+export const formatMessage = (
   key: string,
   description: string,
   type: string,
@@ -143,7 +142,7 @@ const examples = [
   },
 ] as ChatCompletionMessageParam[];
 
-const agent = new Agent({
+export const agent = new Agent({
   system_prompt,
   examples,
 });
