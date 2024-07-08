@@ -22,7 +22,7 @@ export default function HeroSection({ ...props }) {
               </p>
             </div>
             <LinkButton
-              url={process.env.DEMO_CALENDAR_URL}
+              url={process.env.NEXT_PUBLIC_DEMO_CALENDAR_URL}
               className="text-base font-medium flex gap-3"
             >
               <Calendar className="h-5 w-5" />
@@ -37,7 +37,7 @@ export default function HeroSection({ ...props }) {
               <iframe
                 width="100%"
                 height="100%"
-                src={process.env.DEMO_VIDEO_URL}
+                src={process.env.NEXT_PUBLIC_DEMO_VIDEO_URL}
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
