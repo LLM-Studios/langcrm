@@ -15,7 +15,6 @@ export async function GET() {
       { status: 401 },
     );
   }
-  console.log("GET");
   return await apiFetch("/schema", {
     method: "GET",
     headers: {
@@ -38,12 +37,10 @@ export async function POST(req: Request) {
     );
   }
   const body = await req.json();
-  console.log("POST", body);
   return apiFetch("/schema", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
   });
@@ -63,12 +60,10 @@ export async function PATCH(req: Request) {
     );
   }
   const body = await req.json();
-  console.log("PATCH", body);
   return apiFetch("/schema/" + body.id, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       ...body,
@@ -91,12 +86,10 @@ export async function DELETE(req: Request) {
     );
   }
   const { key } = await req.json();
-  console.log("DELETE", key);
   return apiFetch("/schema/" + key, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
     },
   });
 }
