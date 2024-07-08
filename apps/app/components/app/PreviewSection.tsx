@@ -6,7 +6,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Code, Terminal } from "lucide-react";
+import { Code, BookOpen } from "lucide-react";
 import LinkButton from "@/components/LinkButton";
 import Image from "next/image";
 
@@ -48,9 +48,9 @@ export default function PreviewSection({ ...props }) {
               />
             </CardContent>
             <CardFooter>
-              <LinkButton url="https://langcrm.com/docs" className="gap-2">
-                <Terminal className="h-4 w-4" />
-                Documentation
+              <LinkButton url={`${process.env.NEXT_PUBLIC_API_URL}/../docs`} className="gap-2">
+                <BookOpen className="h-4 w-4" />
+                Docs
               </LinkButton>
             </CardFooter>
           </Card>
