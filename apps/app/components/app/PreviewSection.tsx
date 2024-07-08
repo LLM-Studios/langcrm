@@ -48,7 +48,10 @@ export default function PreviewSection({ ...props }) {
               />
             </CardContent>
             <CardFooter>
-              <LinkButton url={`${process.env.NEXT_PUBLIC_API_URL}/../docs`} className="gap-2">
+              <LinkButton
+                url={`${process.env.NEXT_PUBLIC_API_URL}/../docs`}
+                className="gap-2"
+              >
                 <BookOpen className="h-4 w-4" />
                 Docs
               </LinkButton>

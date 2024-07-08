@@ -1,8 +1,3 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/saoHaWq8vVL
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 import {
   Card,
   CardHeader,
@@ -16,7 +11,10 @@ import LinkButton from "../LinkButton";
 
 export default function PricingSection({ ...props }) {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32" {...props}>
+    <section
+      className="min-h-screen w-full flex items-center justify-center"
+      {...props}
+    >
       <div className="container grid gap-8 px-4 md:px-6">
         <div className="mx-auto grid max-w-2xl gap-4 text-center">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -29,10 +27,8 @@ export default function PricingSection({ ...props }) {
         <div className="mx-auto grid max-w-2xl gap-6 lg:grid-cols-2 lg:gap-12">
           <Card>
             <CardHeader>
-              <CardTitle>Hobby tier</CardTitle>
-              <CardDescription>
-                Perfect to get started with development.
-              </CardDescription>
+              <CardTitle>Development</CardTitle>
+              <CardDescription>Perfect to get started.</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
               <ul className="space-y-2">
@@ -48,6 +44,12 @@ export default function PricingSection({ ...props }) {
                   </div>
                   <p>Max 100 user profiles</p>
                 </li>
+                <li className="flex items-start gap-2">
+                  <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+                    <span className="text-sm font-medium">3</span>
+                  </div>
+                  <p>Max 1000 requests per day</p>
+                </li>
               </ul>
             </CardContent>
             <CardFooter>
@@ -58,10 +60,8 @@ export default function PricingSection({ ...props }) {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Standard tier</CardTitle>
-              <CardDescription>
-                Use our managed solution to get the most out of your data.
-              </CardDescription>
+              <CardTitle>Production</CardTitle>
+              <CardDescription>Ready for production use.</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
               <ul className="space-y-2">
@@ -69,13 +69,19 @@ export default function PricingSection({ ...props }) {
                   <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
                     <span className="text-sm font-medium">1</span>
                   </div>
-                  <p>No API keys required</p>
+                  <p>Bring your own OpenAI key</p>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
                     <span className="text-sm font-medium">2</span>
                   </div>
-                  <p>No limitations</p>
+                  <p>Unlimited user profiles</p>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+                    <span className="text-sm font-medium">3</span>
+                  </div>
+                  <p>Unlimited requests per day</p>
                 </li>
               </ul>
             </CardContent>

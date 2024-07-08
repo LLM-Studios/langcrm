@@ -50,17 +50,19 @@ export default function SchemaTable({ ...props }) {
         getSchema={getSchema}
         isLoading={isLoading}
       />
-      {isLoading ? (
-        <div className="flex justify-center items-center h-24 w-full">
-          <Loader2 className="h-8 w-8 animate-spin" />
-        </div>
-      ) : (
-        <CurrentSchema
-          schema={schema}
-          setSchema={setSchema}
-          isLoading={isLoading}
-        />
-      )}
+      <div className="border shadow-sm rounded-lg w-full">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-24 w-full">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        ) : (
+          <CurrentSchema
+            schema={schema}
+            setSchema={setSchema}
+            isLoading={isLoading}
+          />
+        )}
+      </div>
     </div>
   );
 }
@@ -85,7 +87,7 @@ function CurrentSchema({
   }
 
   return (
-    <div className="border shadow-sm rounded-lg">
+    <div>
       {isLoading ? (
         <div className="flex justify-center items-center h-24 w-full">
           <Loader2 className="h-8 w-8 animate-spin" />

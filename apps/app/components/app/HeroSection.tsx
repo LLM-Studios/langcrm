@@ -5,7 +5,7 @@ import { Calendar } from "lucide-react";
 export default function HeroSection({ ...props }) {
   return (
     <section
-      className="min-h-screen w-full flex items-center justify-center py-10 md:py-14 lg:py-18 xl:py-28"
+      className="min-h-screen w-full flex items-center justify-center"
       {...props}
     >
       <div className="container px-6 md:px-8">
