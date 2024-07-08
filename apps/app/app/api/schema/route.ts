@@ -15,12 +15,13 @@ export async function GET() {
       { status: 401 },
     );
   }
-  return await apiFetch("/schema", {
+  const response = await apiFetch("/schema", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+  return NextResponse.json(await response.json());
 }
 
 export async function POST(req: Request) {
@@ -37,13 +38,14 @@ export async function POST(req: Request) {
     );
   }
   const body = await req.json();
-  return apiFetch("/schema", {
+  const response = await apiFetch("/schema", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(body),
   });
+  return NextResponse.json(await response.json());
 }
 
 export async function PATCH(req: Request) {
@@ -60,7 +62,7 @@ export async function PATCH(req: Request) {
     );
   }
   const body = await req.json();
-  return apiFetch("/schema/" + body.id, {
+  const response = await apiFetch("/schema/" + body.id, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -70,6 +72,7 @@ export async function PATCH(req: Request) {
       id: undefined,
     }),
   });
+  return NextResponse.json(await response.json());
 }
 
 export async function DELETE(req: Request) {
@@ -86,10 +89,11 @@ export async function DELETE(req: Request) {
     );
   }
   const { key } = await req.json();
-  return apiFetch("/schema/" + key, {
+  const response = await apiFetch("/schema/" + key, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+  return NextResponse.json(await response.json());
 }
