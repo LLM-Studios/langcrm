@@ -1,11 +1,13 @@
 import { agent } from "$modules/schema/generate-key";
-import { Assertion, evaluate, EvaluateTestSuite } from "promptfoo";
+import { Assertion, evaluate, EvaluateTestSuite, GradingResult } from "promptfoo";
+import { printResults } from "./utils";
 
 const input =
   "- name: personal.language\n- description: Language of the user\n- value: German";
 
 async function run() {
   const results = await evaluate({
+    writeLatestResults: false,
     prompts: [
       async ({ vars }) => {
         return [
@@ -21,7 +23,10 @@ async function run() {
         ];
       },
     ],
-    providers: ["openai:gpt-3.5-turbo", "openai:gpt-4o"],
+    providers: [
+      "openai:gpt-3.5-turbo",
+      "openai:gpt-4o",
+    ],
     env: {
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     },
@@ -29,13 +34,32 @@ async function run() {
       {
         assert: [
           {
-            type: "is-json",
+            type: "javascript",
+            value: (async (output, context) => {
+              console.log(output);
+              const result = JSON.parse(output);
+              const isValid = (
+                typeof result === "object" &&
+                result !== null &&
+                result.hasOwnProperty("id") &&
+                typeof result.id === "string" &&
+                result.hasOwnProperty("description") &&
+                typeof result.description === "string" &&
+                result.hasOwnProperty("priority") &&
+                typeof result.priority === "number" &&
+                result.hasOwnProperty("tags") &&
+                Array.isArray(result.tags) &&
+                result.hasOwnProperty("type") &&
+                typeof result.type === "string"
+              );
+              return isValid;
+            }),
           },
         ] as Assertion[],
       },
     ],
   } as EvaluateTestSuite);
-  console.log(JSON.stringify(results.table, null, 2));
+  results.results.forEach(printResults);
 }
 
 export default run;
