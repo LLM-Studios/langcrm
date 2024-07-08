@@ -6,16 +6,18 @@ import * as React from "react";
 export default function LinkButton({
   children,
   url,
+  newWindow = false,
   ...props
 }: {
   url: string | undefined;
   children: React.ReactNode;
+  newWindow?: boolean;
 } & ButtonProps) {
   return (
     <Button
       onClick={() => {
         if (url) {
-          window.open(url, "_blank");
+          window.open(url, newWindow ? "_blank" : "_self");
         }
       }}
       {...props}
