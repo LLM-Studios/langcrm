@@ -41,7 +41,7 @@ export default function Home() {
         <div className="flex gap-3">
           <ThemeToggle />
           <LinkButton
-            url={`${process.env.NEXT_PUBLIC_API_URL}/docs`}
+            url={`${process.env.NEXT_PUBLIC_API_URL}/../docs`}
             className="hidden md:flex gap-3"
             variant="secondary"
           >

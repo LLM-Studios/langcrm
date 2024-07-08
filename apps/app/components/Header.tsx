@@ -29,7 +29,7 @@ export default function Header() {
   const items = [
     {
       icon: <BookOpen className="h-4 w-4" />,
-      href: `${process.env.NEXT_PUBLIC_API_URL}/docs`,
+      href: `${process.env.NEXT_PUBLIC_API_URL}/../docs`,
       label: "Docs",
     },
     {
