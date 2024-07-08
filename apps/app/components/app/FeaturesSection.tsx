@@ -14,8 +14,10 @@ export default function FeaturesSection({ ...props }) {
               Get to know your customers
             </h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Gain deeper insights into the conversations with your users. <br />
-              Understand their intentions by contextualizing them with a dynamically evolving profile.
+              Gain deeper insights into the conversations with your users.{" "}
+              <br />
+              Understand their intentions by contextualizing them with a
+              dynamically evolving profile.
             </p>
           </div>
         </div>
@@ -27,8 +29,9 @@ export default function FeaturesSection({ ...props }) {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Build a dynamic profile of your users based on the messages they send.
-                Extract insights from every conversation on a per-user basis.
+                Build a dynamic profile of your users based on the messages they
+                send. Extract insights from every conversation on a per-user
+                basis.
               </p>
             </CardContent>
           </Card>
@@ -39,8 +42,8 @@ export default function FeaturesSection({ ...props }) {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Identify recurring patterns in the conversations with your users.
-                Gather broader statistical insights across all users.
+                Identify recurring patterns in the conversations with your
+                users. Gather broader statistical insights across all users.
               </p>
             </CardContent>
           </Card>

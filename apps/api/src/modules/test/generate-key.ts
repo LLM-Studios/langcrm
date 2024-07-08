@@ -1,5 +1,10 @@
 import { agent } from "$modules/schema/generate-key";
-import { Assertion, evaluate, EvaluateTestSuite, GradingResult } from "promptfoo";
+import {
+  Assertion,
+  evaluate,
+  EvaluateTestSuite,
+  GradingResult,
+} from "promptfoo";
 import { printResults } from "./utils";
 
 const input =
@@ -23,10 +28,7 @@ async function run() {
         ];
       },
     ],
-    providers: [
-      "openai:gpt-3.5-turbo",
-      "openai:gpt-4o",
-    ],
+    providers: ["openai:gpt-3.5-turbo", "openai:gpt-4o"],
     env: {
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     },
@@ -35,10 +37,10 @@ async function run() {
         assert: [
           {
             type: "javascript",
-            value: (async (output, context) => {
+            value: async (output, context) => {
               console.log(output);
               const result = JSON.parse(output);
-              const isValid = (
+              const isValid =
                 typeof result === "object" &&
                 result !== null &&
                 result.hasOwnProperty("id") &&
@@ -50,10 +52,9 @@ async function run() {
                 result.hasOwnProperty("tags") &&
                 Array.isArray(result.tags) &&
                 result.hasOwnProperty("type") &&
-                typeof result.type === "string"
-              );
+                typeof result.type === "string";
               return isValid;
-            }),
+            },
           },
         ] as Assertion[],
       },
