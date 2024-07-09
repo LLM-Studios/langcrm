@@ -13,10 +13,10 @@ const swaggerPlugin = () =>
       documentation: {
         info: {
           title: "LangCRM API",
-          version: "1.0.0",
+          version: "0.0.1",
         },
       },
-      exclude: ["/docs", "/docs/json", "/token/{id}"],
+      exclude: ["/docs", "/docs/json", "/api/token/{id}"],
     }),
   );
 
