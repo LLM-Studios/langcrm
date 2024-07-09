@@ -1,5 +1,6 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Lightbulb, ScatterChart } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { BarChart, Filter, Lightbulb, ScatterChart } from "lucide-react";
 
 export default function FeaturesSection({ ...props }) {
   return (
@@ -44,6 +45,34 @@ export default function FeaturesSection({ ...props }) {
               <p className="text-muted-foreground">
                 Identify recurring patterns in the conversations with your
                 users. Gather broader statistical insights across all users.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardTitle className="px-2 py-1">
+              <Badge>Coming Soon</Badge>
+            </CardTitle>
+            <CardHeader>
+              <Filter className="h-6 w-6" />
+              <h3 className="text-xl font-bold">Filters</h3>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">
+                Filter your data to focus on specific conversations or users.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardTitle className="px-2 py-1">
+              <Badge>Coming Soon</Badge>
+            </CardTitle>
+            <CardHeader>
+              <BarChart className="h-6 w-6" />
+              <h3 className="text-xl font-bold">Charts</h3>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">
+                Visualize your data with charts and graphs.
               </p>
             </CardContent>
           </Card>

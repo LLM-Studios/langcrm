@@ -54,7 +54,7 @@ export default function PricingSection({ ...props }) {
             </CardContent>
             <CardFooter>
               <LinkButton url="#hero" className="w-full">
-                Get started
+                Join waitlist
               </LinkButton>
             </CardFooter>
           </Card>
