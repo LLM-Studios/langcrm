@@ -3,6 +3,16 @@ import { createClient } from "@/lib/supabase/server";
 import Header from "@/components/Header";
 import SchemaTable from "./SchemaTable";
 
+const defaultUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3001";
+
+export const metadata = {
+  metadataBase: new URL(defaultUrl),
+  title: "Schema - LangCRM Dashboard",
+  description: "Manage your LangCRM schema",
+};
+
 export default async function Data() {
   const supabase = createClient();
 

@@ -3,6 +3,16 @@ import { redirect } from "next/navigation";
 import Header from "@/components/Header";
 import { createClient } from "@/lib/supabase/server";
 
+const defaultUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3001";
+
+export const metadata = {
+  metadataBase: new URL(defaultUrl),
+  title: "Data - LangCRM Dashboard",
+  description: "View your LangCRM data",
+};
+
 export default async function Data() {
   const supabase = createClient();
 

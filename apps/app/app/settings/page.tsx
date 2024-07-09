@@ -12,8 +12,17 @@ import {
 import { Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import LinkButton from "@/components/LinkButton";
-import { User as SupabaseUser } from "@supabase/supabase-js";
 import { getUser } from "@/lib/supabase/utils";
+
+const defaultUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3001";
+
+export const metadata = {
+  metadataBase: new URL(defaultUrl),
+  title: "Settings - LangCRM Dashboard",
+  description: "Manage your LangCRM settings",
+};
 
 export default async function Settings() {
   const supabase = createClient();

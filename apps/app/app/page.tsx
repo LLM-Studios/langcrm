@@ -9,6 +9,16 @@ import {
   PricingSection,
 } from "@/components/app";
 
+const defaultUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3001";
+
+export const metadata = {
+  metadataBase: new URL(defaultUrl),
+  title: "LangCRM - Conversational insights",
+  description: "Get structured insights from your conversations",
+};
+
 export default function Home() {
   return (
     <div key="1" className="flex flex-col min-h-[100dvh]">
