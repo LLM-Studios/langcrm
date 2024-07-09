@@ -1,13 +1,14 @@
 import schema from "$modules/schema";
 import { App } from "$plugins/index";
 import { t } from "elysia";
-import { generateKey } from "$modules/schema/generate-key";
-import { extractKeys } from "$modules/schema/extract-keys";
 import { stringify } from "yaml";
 import { uniqBy } from "lodash";
-import { extractKeyValue } from "$modules/data/extract-key-value";
 import data from "$modules/data";
 import { Key } from "@repo/database/prisma";
+import { generateKey } from "$modules/schema/generate-key";
+import { extractKeys } from "$modules/schema/extract-keys";
+import { extractKeyValue } from "$modules/data/extract-key-value";
+import { controlKeysQuality } from "$modules/schema/control-key-quality";
 
 const route = (app: App) =>
   app.post(
@@ -22,13 +23,22 @@ const route = (app: App) =>
 
         logger.debug({ input, extractedKeys });
 
+        if (extractedKeys.length === 0) {
+          return {
+            input,
+            newKeys: [],
+            updatedValues: [],
+          };
+        }
+
         let newKeys: { key: string; description: string; value: any }[] = [];
 
         const existingKeys = uniqBy(
           (
             await Promise.all(
               extractedKeys.map(async (key) => {
-                const keys = await schema.searchKeys(workspaceId, key.key);
+                const query = key.key.split(".").pop() ?? key.key;
+                const keys = await schema.searchKeys(workspaceId, query);
                 if (keys.length === 0) {
                   newKeys.push(key);
                 }
@@ -41,15 +51,25 @@ const route = (app: App) =>
 
         logger.debug({ newKeys, existingKeys });
 
-        const generatedKeys = (await Promise.all(
-          newKeys.map(async (key) => {
-            const generatedKey = await generateKey(stringify(key));
-            await schema.upsertKey(workspaceId, generatedKey.id, generatedKey);
-            return generatedKey;
-          }),
-        )) as Key[];
+        let generatedKeys: Key[] = [];
+
+        generatedKeys = await Promise.all(
+          newKeys.map(async (key) => await generateKey(stringify(key))),
+        ) as Key[];
 
         logger.debug({ generatedKeys });
+
+        const qualityControlledKeys = await controlKeysQuality(input, generatedKeys) as Key[];
+
+        logger.debug({ qualityControlledKeys });
+
+        const createdKeys = await Promise.all(
+          qualityControlledKeys.map(async (key) => {
+            return await schema.upsertKey(workspaceId, key.id, key);
+          }),
+        );
+
+        logger.debug({ createdKeys });
 
         const currentValues = (
           await data.getValues(
@@ -79,9 +99,8 @@ const route = (app: App) =>
                 currentValue,
                 relevantData,
               });
-              // QA step
               logger.debug({ input, value, currentValue, key, relevantData });
-              if (value && value !== currentValue) {
+              if (value && value !== "null" && value !== currentValue) {
                 return await data.updateValue(
                   workspaceId,
                   distinctId,
@@ -92,7 +111,7 @@ const route = (app: App) =>
             }),
           ),
           Promise.all(
-            generatedKeys.map(async (key) => {
+            createdKeys.map(async (key) => {
               const relevantKeys = await schema.searchKeys(workspaceId, key.id);
               const relevantData = await data.getValues(
                 workspaceId,
@@ -104,9 +123,8 @@ const route = (app: App) =>
                 key,
                 relevantData,
               });
-              // QA step
               logger.debug({ input, value, key, relevantData });
-              if (value) {
+              if (value && value !== "null") {
                 return await data.updateValue(
                   workspaceId,
                   distinctId,
