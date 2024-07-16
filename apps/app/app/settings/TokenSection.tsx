@@ -140,6 +140,13 @@ export default function TokenSection({ ...props }) {
                         })}
                       </TableCell>
                       <TableCell className="flex flex-row gap-2 justify-end">
+                        {process.env.NODE_ENV === "development" ? (
+                          <Button variant={"outline"} onClick={() => copyToken(item.value)}>
+                            <Copy className="h-4 w-4" />
+                          </Button>
+                        ) : (
+                          <></>
+                        )}
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <Button variant={"destructive"}>
